@@ -1,9 +1,12 @@
 language: go
-
+sudo: required
+dist: trusty
+before_install:
+  - sudo add-apt-repository ppa:ecometrica/servers
+  - sudo apt-get update
+  - sudo apt-get install wkhtmltopdf  
 go:
   - tip
   - 1.5
-  
 os:
   - linux
-  - osx
