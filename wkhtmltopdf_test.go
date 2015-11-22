@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func newTestPDFGenerator(tb testing.TB) *pdfGenerator {
+func newTestPDFGenerator(tb testing.TB) *PdfGenerator {
 
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
