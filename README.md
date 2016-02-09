@@ -75,8 +75,8 @@ func ExampleSimple() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Done")
-	// Output: Done
+	//Or to use the raw PDF data
+	//pdf := pdfg.Bytes()
 }
 
 ````
