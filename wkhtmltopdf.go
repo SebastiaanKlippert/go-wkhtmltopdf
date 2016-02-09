@@ -111,7 +111,7 @@ type PdfGenerator struct {
 
 	Cover      cover
 	TOC        toc
-	OutputFile string //filename to write to too, default empty (writes to internal buffer)
+	OutputFile string //filename to write to, default empty (writes to internal buffer)
 
 	binPath string
 	outbuf  bytes.Buffer
@@ -249,7 +249,6 @@ func (pdfg *PdfGenerator) run() error {
 			return errors.New(bs.Text())
 		}
 		return err
-
 	}
 	return nil
 }
