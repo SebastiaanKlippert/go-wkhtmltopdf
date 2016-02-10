@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func ExampleSimple() {
+func ExampleNewPDFGenerator() {
 
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
