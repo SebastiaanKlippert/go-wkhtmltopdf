@@ -1,4 +1,4 @@
-//Package wkhtmltopdf contains wrappers around the wkhtmltopdf commandline tool
+// Package wkhtmltopdf contains wrappers around the wkhtmltopdf commandline tool
 package wkhtmltopdf
 
 import (
@@ -14,24 +14,30 @@ import (
 	"strings"
 )
 
-//for each page
+var binPath string //the cached paths as used by findPath()
+
+// Page is the input struct for each page
 type Page struct {
 	Input string
 	PageOptions
 }
 
+// InputFile returns the input string and is part of the part interface
 func (p *Page) InputFile() string {
 	return p.Input
 }
 
+// Args returns the argument slice and is part of the part interface
 func (p *Page) Args() []string {
 	return p.PageOptions.Args()
 }
 
-func (pr *Page) Reader() io.Reader {
+// Reader returns the io.Reader and is part of the part interface
+func (p *Page) Reader() io.Reader {
 	return nil
 }
 
+// NewPage creates a new input page from a local or web resource (filepath or URL)
 func NewPage(input string) *Page {
 	return &Page{
 		Input:       input,
@@ -39,25 +45,29 @@ func NewPage(input string) *Page {
 	}
 }
 
-//PageReader is one input page (a HTML document) that is read from an io.Reader
-//You can add only one Page from a reader
+// PageReader is one input page (a HTML document) that is read from an io.Reader
+// You can add only one Page from a reader
 type PageReader struct {
 	Input io.Reader
 	PageOptions
 }
 
+// InputFile returns the input string and is part of the part interface
 func (pr *PageReader) InputFile() string {
 	return "-"
 }
 
+// Args returns the argument slice and is part of the part interface
 func (pr *PageReader) Args() []string {
 	return pr.PageOptions.Args()
 }
 
+//Reader returns the io.Reader and is part of the part interface
 func (pr *PageReader) Reader() io.Reader {
 	return pr.Input
 }
 
+// NewPageReader creates a new PageReader from an io.Reader
 func NewPageReader(input io.Reader) *PageReader {
 	return &PageReader{
 		Input:       input,
@@ -71,15 +81,18 @@ type page interface {
 	Reader() io.Reader
 }
 
+// PageOptions are options for each input page
 type PageOptions struct {
 	pageOptions
 	headerAndFooterOptions
 }
 
+// Args returns the argument slice
 func (po *PageOptions) Args() []string {
 	return append(append([]string{}, po.pageOptions.Args()...), po.headerAndFooterOptions.Args()...)
 }
 
+// NewPageOptions returns a new PageOptions struct with all options
 func NewPageOptions() PageOptions {
 	return PageOptions{
 		pageOptions:            newPageOptions(),
@@ -87,13 +100,13 @@ func NewPageOptions() PageOptions {
 	}
 }
 
-//cover page
+// cover page
 type cover struct {
 	Input string
 	pageOptions
 }
 
-//table of contents
+// table of contents
 type toc struct {
 	Include bool
 	allTocOptions
@@ -104,8 +117,8 @@ type allTocOptions struct {
 	tocOptions
 }
 
-//PdfGenerator is the main wkhtmltopdf struct
-type PdfGenerator struct {
+// PDFGenerator is the main wkhtmltopdf struct, always use NewPDFGenerator to obtain a new PDFGenerator struct
+type PDFGenerator struct {
 	globalOptions
 	outlineOptions
 
@@ -119,7 +132,7 @@ type PdfGenerator struct {
 }
 
 //Args returns the commandline arguments as a string slice
-func (pdfg *PdfGenerator) Args() []string {
+func (pdfg *PDFGenerator) Args() []string {
 	args := []string{}
 	args = append(args, pdfg.globalOptions.Args()...)
 	args = append(args, pdfg.outlineOptions.Args()...)
@@ -146,35 +159,35 @@ func (pdfg *PdfGenerator) Args() []string {
 	return args
 }
 
-//Argstring returns Args as a single string
-func (pdfg *PdfGenerator) ArgString() string {
+// Argstring returns Args as a single string
+func (pdfg *PDFGenerator) ArgString() string {
 	return strings.Join(pdfg.Args(), " ")
 }
 
-//AddPage adds a new input page to the document.
-//A page is an input HTML page, it can span multiple pages in the output document.
-//It is a Page when read from file or URL or a PageReader when read from memory.
-func (pdfg *PdfGenerator) AddPage(p page) {
+// AddPage adds a new input page to the document.
+// A page is an input HTML page, it can span multiple pages in the output document.
+// It is a Page when read from file or URL or a PageReader when read from memory.
+func (pdfg *PDFGenerator) AddPage(p page) {
 	pdfg.pages = append(pdfg.pages, p)
 }
 
-//SetPages resets all pages
-func (pdfg *PdfGenerator) SetPages(p []page) {
+// SetPages resets all pages
+func (pdfg *PDFGenerator) SetPages(p []page) {
 	pdfg.pages = p
 }
 
-//Buffer returns the embedded output buffer used if OutputFile is empty
-func (pdfg *PdfGenerator) Buffer() *bytes.Buffer {
+// Buffer returns the embedded output buffer used if OutputFile is empty
+func (pdfg *PDFGenerator) Buffer() *bytes.Buffer {
 	return &pdfg.outbuf
 }
 
-//Bytes returns the output byte slice from the output buffer used if OutputFile is empty
-func (pdfg *PdfGenerator) Bytes() []byte {
+// Bytes returns the output byte slice from the output buffer used if OutputFile is empty
+func (pdfg *PDFGenerator) Bytes() []byte {
 	return pdfg.outbuf.Bytes()
 }
 
-//WriteFile writes the contents of the output buffer to a file
-func (pdfg *PdfGenerator) WriteFile(filename string) error {
+// WriteFile writes the contents of the output buffer to a file
+func (pdfg *PDFGenerator) WriteFile(filename string) error {
 	return ioutil.WriteFile(filename, pdfg.Bytes(), os.ModeExclusive)
 }
 
@@ -184,17 +197,17 @@ func (pdfg *PdfGenerator) WriteFile(filename string) error {
 //- using the WKHTMLTOPDF_PATH environment dir
 //The path is cached, meaning you can not change the location of wkhtmltopdf in
 //a running program once it has been found
-func (pdfg *PdfGenerator) findPath() error {
+func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
 	if binPath != "" {
 		pdfg.binPath = binPath
 		return nil
 	}
-	exe_dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return err
 	}
-	path, err := exec.LookPath(filepath.Join(exe_dir, exe))
+	path, err := exec.LookPath(filepath.Join(exeDir, exe))
 	if err == nil && path != "" {
 		binPath = path
 		pdfg.binPath = path
@@ -219,13 +232,12 @@ func (pdfg *PdfGenerator) findPath() error {
 	return fmt.Errorf("%s not found", exe)
 }
 
-var binPath string //the cached paths as used by findPath()
-
-func (pdfg *PdfGenerator) Create() error {
+// Create creates the PDF document and stores it in the internal buffer if no error is returned
+func (pdfg *PDFGenerator) Create() error {
 	return pdfg.run()
 }
 
-func (pdfg *PdfGenerator) run() error {
+func (pdfg *PDFGenerator) run() error {
 
 	errbuf := &bytes.Buffer{}
 
@@ -253,9 +265,10 @@ func (pdfg *PdfGenerator) run() error {
 	return nil
 }
 
-//NewPDFGenerator returns a new wkhtmltopdf struct
-func NewPDFGenerator() (*PdfGenerator, error) {
-	pdfg := &PdfGenerator{
+// NewPDFGenerator returns a new PDFGenerator struct with all options created and
+// checks if wkhtmltopdf can be found on the system
+func NewPDFGenerator() (*PDFGenerator, error) {
+	pdfg := &PDFGenerator{
 		globalOptions:  newGlobalOptions(),
 		outlineOptions: newOutlineOptions(),
 		Cover: cover{

@@ -8,6 +8,7 @@ before_install:
   - sudo dpkg -i wkhtmltox-0.12.2_linux-wheezy-amd64.deb
 go:
   - tip
+  - 1.6
   - 1.5
 os:
   - linux

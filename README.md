@@ -1,5 +1,6 @@
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](http://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf)
 [![Build Status](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf.svg?branch=master)](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf)
+[![Go Report Card](http://goreportcard.com/badge/SebastiaanKlippert/go-wkhtmltopdf)](http:/goreportcard.com/report/SebastiaanKlippert/go-wkhtmltopdf)
 
 # go-wkhtmltopdf
 Golang commandline wrapper for wkhtmltopdf
@@ -7,7 +8,7 @@ Golang commandline wrapper for wkhtmltopdf
 Work in progress, used internally only at this point. 
 No guarantees and everything may change.
 
-See http://wkhtmltopdf.org/index.html
+See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs
 
 #What and why
 go-wkhtmltopdf is a pure Golang wrapper around the wkhtmltopdf command line utility.
@@ -18,7 +19,7 @@ For example you can set general options like
 ```go
 pdfg.Dpi.Set(600)
 pdfg.NoCollate.Set(false)
-pdfg.PageSize.Set(PageSize_A4)
+pdfg.PageSize.Set(PageSizeA4)
 pdfg.MarginBottom.Set(40)
 ``` 
 The same goes for adding pages, settings page options, TOC options per page etc.
@@ -59,26 +60,32 @@ import (
 	"log"
 )
 
-func ExampleSimple() {
+func ExampleNewPDFGenerator() {
 
+	// Create new PDF generator
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Add one page from an URL
 	pdfg.AddPage(NewPage("https://github.com/SebastiaanKlippert/go-wkhtmltopdf"))
+
+	// Create PDF document in internal buffer
 	err = pdfg.Create()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Write buffer contents to file on disk
 	err = pdfg.WriteFile("./simplesample.pdf")
 	if err != nil {
 		log.Fatal(err)
 	}
-	//Or to use the raw PDF data
-	//pdf := pdfg.Bytes()
-}
 
+	fmt.Println("Done")
+	// Output: Done
+}
 ````
 
 #Speed 

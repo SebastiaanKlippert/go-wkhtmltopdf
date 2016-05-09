@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func newTestPDFGenerator(tb testing.TB) *PdfGenerator {
+func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
@@ -15,7 +15,7 @@ func newTestPDFGenerator(tb testing.TB) *PdfGenerator {
 
 	pdfg.Dpi.Set(600)
 	pdfg.NoCollate.Set(false)
-	pdfg.PageSize.Set(PageSize_A4)
+	pdfg.PageSize.Set(PageSizeA4)
 	pdfg.MarginBottom.Set(40)
 
 	page1 := NewPage("https://www.google.com")

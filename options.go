@@ -13,7 +13,7 @@ type globalOptions struct {
 	ExtendedHelp      boolOption   //Display more extensive help, detailing less common command switches
 	Grayscale         boolOption   //PDF will be generated in grayscale
 	Help              boolOption   //Display help
-	HtmlDoc           boolOption   //Output program html help
+	HTMLDoc           boolOption   //Output program html help
 	ImageDpi          uintOption   //When embedding images scale them down to this dpi (default 600)
 	ImageQuality      uintOption   //When jpeg compressing images use this quality (default 94)
 	License           boolOption   //Output license information and exit
@@ -267,7 +267,7 @@ func newGlobalOptions() globalOptions {
 		ExtendedHelp:      boolOption{option: "extended-help"},
 		Grayscale:         boolOption{option: "grayscale"},
 		Help:              boolOption{option: "true"},
-		HtmlDoc:           boolOption{option: "htmldoc"},
+		HTMLDoc:           boolOption{option: "htmldoc"},
 		ImageDpi:          uintOption{option: "image-dpi"},
 		ImageQuality:      uintOption{option: "image-quality"},
 		License:           boolOption{option: "license"},
@@ -397,39 +397,43 @@ func optsToArgs(opts interface{}) []string {
 	return args
 }
 
+// Constants for orientation modes
 const (
-	Orientation_Landscape = "Landscape"
-	Orientation_Portrait  = "Portrait"
+	OrientationLandscape = "Landscape" // Landscape mode
+	OrientationPortrait  = "Portrait"  // Portrait mode
+)
 
-	PageSize_A0        = "A0"        //	841 x 1189 mm
-	PageSize_A1        = "A1"        //	594 x 841 mm
-	PageSize_A2        = "A2"        //	420 x 594 mm
-	PageSize_A3        = "A3"        //	297 x 420 mm
-	PageSize_A4        = "A4"        //	210 x 297 mm, 8.26
-	PageSize_A5        = "A5"        //	148 x 210 mm
-	PageSize_A6        = "A6"        //	105 x 148 mm
-	PageSize_A7        = "A7"        //	74 x 105 mm
-	PageSize_A8        = "A8"        //	52 x 74 mm
-	PageSize_A9        = "A9"        //	37 x 52 mm
-	PageSize_B0        = "B0"        //	1000 x 1414 mm
-	PageSize_B1        = "B1"        //	707 x 1000 mm
-	PageSize_B2        = "B2"        //	500 x 707 mm
-	PageSize_B3        = "B3"        //	353 x 500 mm
-	PageSize_B4        = "B4"        //	250 x 353 mm
-	PageSize_B5        = "B5"        //	176 x 250 mm, 6.93
-	PageSize_B6        = "B6"        //	125 x 176 mm
-	PageSize_B7        = "B7"        //	88 x 125 mm
-	PageSize_B8        = "B8"        //	62 x 88 mm
-	PageSize_B9        = "B9"        //	33 x 62 mm
-	PageSize_B10       = "B10"       //	31 x 44 mm
-	PageSize_C5E       = "C5E"       //	163 x 229 mm
-	PageSize_Comm10E   = "Comm10E"   //	105 x 241 mm, U.S. Common 10 Envelope
-	PageSize_DLE       = "DLE"       //	110 x 220 mm
-	PageSize_Executive = "Executive" //	7.5 x 10 inches, 190.5 x 254 mm
-	PageSize_Folio     = "Folio"     //	210 x 330 mm
-	PageSize_Ledger    = "Ledger"    //	431.8 x 279.4 mm
-	PageSize_Legal     = "Legal"     //	8.5 x 14 inches, 215.9 x 355.6 mm
-	PageSize_Letter    = "Letter"    //	8.5 x 11 inches, 215.9 x 279.4 mm
-	PageSize_Tabloid   = "Tabloid"   //	279.4 x 431.8 mm
-	PageSize_Custom    = "Custom"    //	Unknown, or a user defined size.
+// Constants for page sizes
+const (
+	PageSizeA0        = "A0"        //	841 x 1189 mm
+	PageSizeA1        = "A1"        //	594 x 841 mm
+	PageSizeA2        = "A2"        //	420 x 594 mm
+	PageSizeA3        = "A3"        //	297 x 420 mm
+	PageSizeA4        = "A4"        //	210 x 297 mm, 8.26
+	PageSizeA5        = "A5"        //	148 x 210 mm
+	PageSizeA6        = "A6"        //	105 x 148 mm
+	PageSizeA7        = "A7"        //	74 x 105 mm
+	PageSizeA8        = "A8"        //	52 x 74 mm
+	PageSizeA9        = "A9"        //	37 x 52 mm
+	PageSizeB0        = "B0"        //	1000 x 1414 mm
+	PageSizeB1        = "B1"        //	707 x 1000 mm
+	PageSizeB2        = "B2"        //	500 x 707 mm
+	PageSizeB3        = "B3"        //	353 x 500 mm
+	PageSizeB4        = "B4"        //	250 x 353 mm
+	PageSizeB5        = "B5"        //	176 x 250 mm, 6.93
+	PageSizeB6        = "B6"        //	125 x 176 mm
+	PageSizeB7        = "B7"        //	88 x 125 mm
+	PageSizeB8        = "B8"        //	62 x 88 mm
+	PageSizeB9        = "B9"        //	33 x 62 mm
+	PageSizeB10       = "B10"       //	31 x 44 mm
+	PageSizeC5E       = "C5E"       //	163 x 229 mm
+	PageSizeComm10E   = "Comm10E"   //	105 x 241 mm, U.S. Common 10 Envelope
+	PageSizeDLE       = "DLE"       //	110 x 220 mm
+	PageSizeExecutive = "Executive" //	7.5 x 10 inches, 190.5 x 254 mm
+	PageSizeFolio     = "Folio"     //	210 x 330 mm
+	PageSizeLedger    = "Ledger"    //	431.8 x 279.4 mm
+	PageSizeLegal     = "Legal"     //	8.5 x 14 inches, 215.9 x 355.6 mm
+	PageSizeLetter    = "Letter"    //	8.5 x 11 inches, 215.9 x 279.4 mm
+	PageSizeTabloid   = "Tabloid"   //	279.4 x 431.8 mm
+	PageSizeCustom    = "Custom"    //	Unknown, or a user defined size.
 )
