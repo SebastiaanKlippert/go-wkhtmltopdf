@@ -5,10 +5,10 @@
 # go-wkhtmltopdf
 Golang commandline wrapper for wkhtmltopdf
 
-Work in progress, used internally only at this point. 
-No guarantees and everything may change.
+Work in progress, used internally only at this point.   
+No guarantees and **everything may change**.
 
-See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs
+See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 
 #What and why
 go-wkhtmltopdf is a pure Golang wrapper around the wkhtmltopdf command line utility.
@@ -35,7 +35,7 @@ options for each input document.
 Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files.
 
 #Installation
-go get or use a Go dependency manager of your liking
+go get or use a Go dependency manager of your liking.
 
 ```
 go get -u github.com/SebastiaanKlippert/go-wkhtmltopdf
@@ -47,10 +47,10 @@ go-wkhtmltopdf finds the path to wkhtmltopdf by
 * using the WKHTMLTOPDF_PATH environment dir
 
 The path is cached, meaning you can not change the location of wkhtmltopdf in
-a running program once it has been found
+a running program once it has been found.
 
 #Usage
-See testfile for more complex options, the most simple test is in simplesample_test.go
+See testfile ```wkhtmltopdf_test.go``` for more complex options, the most simple test is in ```simplesample_test.go``` 
 
 ```go
 package wkhtmltopdf
@@ -91,6 +91,6 @@ func ExampleNewPDFGenerator() {
 #Speed 
 The speed if pretty much determined by wkhtmltopdf itself, or if you use extrnal source URLs, the time it takes to get the source HTML.
 
-The go wrapper time is negligible with around 0.036ms for parsing an above average number of commandline options.
+The go wrapper time is negligible with around 0.04ms for parsing an above average number of commandline options.
 
 Benchmarks are included.
