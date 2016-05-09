@@ -159,7 +159,7 @@ func (pdfg *PDFGenerator) Args() []string {
 	return args
 }
 
-// Argstring returns Args as a single string
+// ArgString returns Args as a single string
 func (pdfg *PDFGenerator) ArgString() string {
 	return strings.Join(pdfg.Args(), " ")
 }
