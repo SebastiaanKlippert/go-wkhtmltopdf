@@ -67,9 +67,11 @@ func TestNoInput(t *testing.T) {
 	if err == nil {
 		t.Fatal("Want an error when there is no input, have no error")
 	}
-	wantErr := "You need to specify at least one input file, and exactly one output file"
-	if strings.HasPrefix(err.Error(), wantErr) == false {
-		t.Errorf("Want error prefix %s, have %s", wantErr, err.Error())
+	//TODO temp error check because older versions of wkhtmltopdf return a different error :(
+	wantErrNew := "You need to specify at least one input file, and exactly one output file"
+	wantErrOld := "You need to specify atleast one input file, and exactly one output file"
+	if strings.HasPrefix(err.Error(), wantErrNew) == false  && strings.HasPrefix(err.Error(), wantErrOld) == false  {
+		t.Errorf("Want error prefix %s or %s, have %s", wantErrNew, wantErrOld, err.Error())
 	}
 }
 
