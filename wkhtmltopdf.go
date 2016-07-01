@@ -2,7 +2,6 @@
 package wkhtmltopdf
 
 import (
-	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
