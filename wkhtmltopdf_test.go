@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"testing"
+	"strings"
 )
 
 func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
@@ -66,9 +67,9 @@ func TestNoInput(t *testing.T) {
 	if err == nil {
 		t.Fatal("Want an error when there is no input, have no error")
 	}
-	wantErr := "You need to specify atleast one input file, and exactly one output file"
-	if err.Error() != wantErr {
-		t.Errorf("Want error %s, have %s", wantErr, err.Error())
+	wantErr := "You need to specify at least one input file, and exactly one output file"
+	if strings.HasPrefix(err.Error(), wantErr) == false {
+		t.Errorf("Want error prefix %s, have %s", wantErr, err.Error())
 	}
 }
 
