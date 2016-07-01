@@ -255,12 +255,7 @@ func (pdfg *PDFGenerator) run() error {
 
 	err := cmd.Run()
 	if err != nil {
-		//return first line only
-		bs := bufio.NewScanner(errbuf)
-		if bs.Scan() {
-			return errors.New(bs.Text())
-		}
-		return err
+		return errors.New(errbuf.String())
 	}
 	return nil
 }
