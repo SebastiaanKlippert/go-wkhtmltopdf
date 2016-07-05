@@ -254,7 +254,11 @@ func (pdfg *PDFGenerator) run() error {
 
 	err := cmd.Run()
 	if err != nil {
-		return errors.New(errbuf.String())
+		errStr := errbuf.String()
+		if strings.TrimSpace(errStr) == "" {
+			errStr = err.Error()
+		}
+		return errors.New(errStr)
 	}
 	return nil
 }
