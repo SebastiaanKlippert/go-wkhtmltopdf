@@ -5,8 +5,11 @@
 # go-wkhtmltopdf
 Golang commandline wrapper for wkhtmltopdf
 
-Work in progress, used internally only at this point.   
-No guarantees and **everything may change**.
+~~Work in progress, used internally only at this point.~~  
+~~No guarantees and **everything may change**.~~  
+Update 17-07-2016:  
+This package is now used in our production environment after a long test period so changes are unlikely.  
+Bugs wil be fixed as soon as they are found, but don't expect major changes from now on.  
 
 See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 
