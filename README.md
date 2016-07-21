@@ -14,6 +14,8 @@ Bugs wil be fixed as soon as they are found, but don't expect major changes from
 See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 
 #What and why
+We needed a way to generate PDF documents from Go. These vary from invoices with highly customizable lay-outs to reports with tables, graphs and images. In our opinion the best way to do this was by using HTML/CSS templates as source for our PDFs. Using CSS print media types and millimeters instead of pixel units we can generate very acurate PDF documents using wkhtmltopdf.
+
 go-wkhtmltopdf is a pure Golang wrapper around the wkhtmltopdf command line utility.
 
 It has all options typed out as struct members which makes it very easy to use if you use an IDE with
@@ -36,6 +38,8 @@ You can combine any number or external HTML documents (HTTP(S) links) with at mo
 options for each input document.
 
 Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files.
+
+For us this is one of the easiest ways to genere PDF documents from Go(lang) and performance is very acceptable.
 
 #Installation
 go get or use a Go dependency manager of your liking.
