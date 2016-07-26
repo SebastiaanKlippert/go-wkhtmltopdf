@@ -13,6 +13,5 @@ go:
   - 1.6
 os:
   - osx
-after_success:
-  - sudo chmod 755 ./upload-pdf.sh
-  - ./upload-pdf.sh
+addons:
+  artifacts: true
