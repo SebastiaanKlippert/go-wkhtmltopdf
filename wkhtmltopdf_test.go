@@ -3,8 +3,8 @@ package wkhtmltopdf
 import (
 	"bytes"
 	"io/ioutil"
-	"testing"
 	"strings"
+	"testing"
 )
 
 func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
@@ -70,7 +70,7 @@ func TestNoInput(t *testing.T) {
 	//TODO temp error check because older versions of wkhtmltopdf return a different error :(
 	wantErrNew := "You need to specify at least one input file, and exactly one output file"
 	wantErrOld := "You need to specify atleast one input file, and exactly one output file"
-	if strings.HasPrefix(err.Error(), wantErrNew) == false  && strings.HasPrefix(err.Error(), wantErrOld) == false  {
+	if strings.HasPrefix(err.Error(), wantErrNew) == false && strings.HasPrefix(err.Error(), wantErrOld) == false {
 		t.Errorf("Want error prefix %s or %s, have %s", wantErrNew, wantErrOld, err.Error())
 	}
 }
@@ -88,7 +88,30 @@ func TestGeneratePDF(t *testing.T) {
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
-func TestGeneratePdfFromStdin(t *testing.T) {
+func TestGeneratePdfFromStdinSimple(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+	htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = pdfg.WriteFile("./testfiles/TestGeneratePdfFromStdinSimple.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
+}
+
+func TestGeneratePdfFromStdinHtml5(t *testing.T) {
+	//Use newTestPDFGenerator and append to page1 and TOC
 	pdfg := newTestPDFGenerator(t)
 	htmlfile, err := ioutil.ReadFile("./testfiles/html5.html")
 	if err != nil {
@@ -100,7 +123,7 @@ func TestGeneratePdfFromStdin(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = pdfg.WriteFile("./testfiles/TestGeneratePdfFromStdin.pdf")
+	err = pdfg.WriteFile("./testfiles/TestGeneratePdfFromStdinHtml5.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}

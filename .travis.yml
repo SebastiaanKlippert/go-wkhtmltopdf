@@ -14,4 +14,4 @@ go:
 os:
   - osx
 after_success:
-  - ./update-gh-pages.sh
+  - ./upload-pdf.sh
