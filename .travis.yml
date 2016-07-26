@@ -6,6 +6,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y openssl build-essential xorg libssl-dev xfonts-75dpi ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2/wkhtmltox-0.12.2_linux-wheezy-amd64.deb ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i wkhtmltox-0.12.2_linux-wheezy-amd64.deb ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo rm wkhtmltox-0.12.2_linux-wheezy-amd64.deb ; fi
   # OSX
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo installer -pkg wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg -target / ; fi
