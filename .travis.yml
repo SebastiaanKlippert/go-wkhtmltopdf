@@ -9,11 +9,10 @@ before_install:
   # OSX
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo installer -pkg wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg -target / ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg ; fi
 go:
   - 1.6
 os:
   - osx
-after_success: 
-  - sudo chmod -R 666 ./testfiles
 addons:
   artifacts: true
