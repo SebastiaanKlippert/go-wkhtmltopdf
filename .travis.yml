@@ -13,3 +13,5 @@ go:
   - 1.6
 os:
   - osx
+after_success:
+  - ./update-gh-pages.sh
