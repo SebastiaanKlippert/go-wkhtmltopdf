@@ -1,8 +1,8 @@
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo -e "Starting to upload PDF results to gh-pages\n"
 
-  mkdir $HOME/testfiles/$TRAVIS_OS_NAME
-  cp -R testfiles $HOME/testfiles/$TRAVIS_OS_NAME
+  sudo mkdir $HOME/testfiles/$TRAVIS_OS_NAME
+  sudo cp -R testfiles $HOME/testfiles/$TRAVIS_OS_NAME
 
   #go to home and setup git
   cd $HOME
@@ -14,7 +14,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   #go into directory and copy data we're interested in to that directory
   cd gh-pages
-  cp -Rf $HOME/testfiles/* .
+  sudo cp -Rf $HOME/testfiles/* .
 
   #add, commit and push files
   git add -f .
