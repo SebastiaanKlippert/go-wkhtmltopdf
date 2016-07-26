@@ -14,4 +14,5 @@ go:
 os:
   - osx
 after_success:
+  - sudo chmod 755 ./upload-pdf.sh
   - ./upload-pdf.sh
