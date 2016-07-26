@@ -110,7 +110,6 @@ func TestGeneratePdfFromStdinSimple(t *testing.T) {
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
-/*
 func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	//Use newTestPDFGenerator and append to page1 and TOC
 	pdfg := newTestPDFGenerator(t)
@@ -130,7 +129,7 @@ func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	}
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
-*/
+
 func BenchmarkArgs(b *testing.B) {
 	pdfg := newTestPDFGenerator(b)
 	b.ResetTimer()
