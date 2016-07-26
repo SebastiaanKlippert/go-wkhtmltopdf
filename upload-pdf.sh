@@ -1,6 +1,7 @@
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo -e "Starting to upload PDF results to gh-pages\n"
 
+  mkdir $HOME/testfiles/$TRAVIS_OS_NAME
   cp -R testfiles $HOME/testfiles/$TRAVIS_OS_NAME
 
   #go to home and setup git
@@ -20,5 +21,5 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   git commit -m "Travis build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
   git push -fq origin gh-pages > /dev/null
 
-  echo -e "Done magic with coverage\n"
+  echo -e "Done\n"
 fi
