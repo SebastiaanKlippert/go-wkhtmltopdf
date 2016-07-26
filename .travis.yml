@@ -13,5 +13,7 @@ go:
   - 1.6
 os:
   - osx
+after_success: 
+  - sudo chmod -R 666 ./testfiles
 addons:
   artifacts: true
