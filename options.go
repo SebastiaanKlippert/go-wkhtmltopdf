@@ -208,11 +208,12 @@ func (mo *mapOption) Set(key, value string) {
 type uintOption struct {
 	option string
 	value  uint
+	isSet  bool
 }
 
 func (io uintOption) Parse() []string {
 	args := []string{}
-	if io.value == 0 {
+	if io.isSet == false {
 		return args
 	}
 	args = append(args, "--"+io.option)
@@ -221,17 +222,19 @@ func (io uintOption) Parse() []string {
 }
 
 func (io *uintOption) Set(value uint) {
+	io.isSet = true
 	io.value = value
 }
 
 type floatOption struct {
 	option string
 	value  float64
+	isSet  bool
 }
 
 func (fo floatOption) Parse() []string {
 	args := []string{}
-	if fo.value == 0 {
+	if fo.isSet == false {
 		return args
 	}
 	args = append(args, "--"+fo.option)
@@ -240,6 +243,7 @@ func (fo floatOption) Parse() []string {
 }
 
 func (fo *floatOption) Set(value float64) {
+	fo.isSet = true
 	fo.value = value
 }
 
