@@ -90,7 +90,7 @@ type pageOptions struct {
 	EnableTocBackLinks        boolOption   //Link from section header to toc
 	UserStyleSheet            stringOption //Specify a user style sheet, to load with every page
 	Username                  stringOption //HTTP Authentication username
-	ViewportSize              uintOption   //Set viewport size if you have custom scrollbars or css attribute overflow to emulate window size
+	ViewportSize              stringOption //Set viewport size if you have custom scrollbars or css attribute overflow to emulate window size
 	WindowStatus              stringOption //Wait until window.status is equal to this string before rendering page
 	Zoom                      floatOption  //Use this zoom factor (default 1)
 }
@@ -340,7 +340,7 @@ func newPageOptions() pageOptions {
 		EnableTocBackLinks:    boolOption{option: "enable-toc-back-links"},
 		UserStyleSheet:        stringOption{option: "user-style-sheet"},
 		Username:              stringOption{option: "username"},
-		ViewportSize:          uintOption{option: "viewport-size"},
+		ViewportSize:          stringOption{option: "viewport-size"},
 		WindowStatus:          stringOption{option: "window-status"},
 		Zoom:                  floatOption{option: "zoom"},
 	}

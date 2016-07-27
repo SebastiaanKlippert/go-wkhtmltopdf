@@ -26,6 +26,7 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 	page1.Allow.Set("/usr/local/html")
 	page1.Allow.Set("/usr/local/images")
 	page1.CustomHeader.Set("X-AppKey", "abcdef")
+	page1.ViewportSize.Set("3840x2160")
 
 	pdfg.AddPage(page1)
 
@@ -40,7 +41,7 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 
 func TestArgString(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
-	want := "--dpi 600 --margin-bottom 40 --page-size A4 cover http://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --header-spacing 10.010 -"
+	want := "--dpi 600 --margin-bottom 40 --page-size A4 cover http://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --viewport-size 3840x2160 --header-spacing 10.010 -"
 	if pdfg.ArgString() != want {
 		t.Errorf("Want argstring:\n%s\nHave:\n%s", want, pdfg.ArgString())
 	}
