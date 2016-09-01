@@ -21,7 +21,7 @@ func SetPath(path string) {
 }
 
 // GetPath gets the path to wkhtmltopdf
-func GetPath() {
+func GetPath() string {
 	return binPath
 }
 
