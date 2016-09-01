@@ -53,8 +53,7 @@ go-wkhtmltopdf finds the path to wkhtmltopdf by
 * looking in the PATH and PATHEXT environment dirs
 * using the WKHTMLTOPDF_PATH environment dir
 
-The path is cached, meaning you can not change the location of wkhtmltopdf in
-a running program once it has been found.
+If you need to set your own wkhtmltopdf path or want to change it during execution, you can call SetPath().
 
 #Usage
 See testfile ```wkhtmltopdf_test.go``` for more complex options, the most simple test is in ```simplesample_test.go``` 
