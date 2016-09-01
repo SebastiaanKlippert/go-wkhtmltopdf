@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-var binPath string //the cached paths as used by findPath()
+var BinPath string //the cached paths as used by findPath()
 
 // Page is the input struct for each page
 type Page struct {
@@ -198,8 +198,8 @@ func (pdfg *PDFGenerator) WriteFile(filename string) error {
 //a running program once it has been found
 func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
-	if binPath != "" {
-		pdfg.binPath = binPath
+	if BinPath != "" {
+		pdfg.binPath = BinPath
 		return nil
 	}
 	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -208,13 +208,13 @@ func (pdfg *PDFGenerator) findPath() error {
 	}
 	path, err := exec.LookPath(filepath.Join(exeDir, exe))
 	if err == nil && path != "" {
-		binPath = path
+		BinPath = path
 		pdfg.binPath = path
 		return nil
 	}
 	path, err = exec.LookPath(exe)
 	if err == nil && path != "" {
-		binPath = path
+		BinPath = path
 		pdfg.binPath = path
 		return nil
 	}
@@ -224,7 +224,7 @@ func (pdfg *PDFGenerator) findPath() error {
 	}
 	path, err = exec.LookPath(filepath.Join(dir, exe))
 	if err == nil && path != "" {
-		binPath = path
+		BinPath = path
 		pdfg.binPath = path
 		return nil
 	}
