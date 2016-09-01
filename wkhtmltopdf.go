@@ -15,6 +15,16 @@ import (
 
 var binPath string //the cached paths as used by findPath()
 
+// SetPath sets the path to wkhtmltopdf
+func SetPath(path string) {
+	binPath = path
+}
+
+// GetPath gets the path to wkhtmltopdf
+func GetPath() string {
+	return binPath
+}
+
 // Page is the input struct for each page
 type Page struct {
 	Input string
