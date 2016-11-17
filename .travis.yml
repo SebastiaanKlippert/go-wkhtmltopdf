@@ -15,6 +15,7 @@ go:
   - tip
   - 1.7
   - 1.6
+script: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .  
 os:
   - linux
   - osx
