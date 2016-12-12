@@ -96,7 +96,7 @@ func ExampleNewPDFGenerator() {
 ````
 
 #Speed 
-The speed if pretty much determined by wkhtmltopdf itself, or if you use extrnal source URLs, the time it takes to get the source HTML.
+The speed if pretty much determined by wkhtmltopdf itself, or if you use external source URLs, the time it takes to get and render the source HTML.
 
 The go wrapper time is negligible with around 0.04ms for parsing an above average number of commandline options.
 
