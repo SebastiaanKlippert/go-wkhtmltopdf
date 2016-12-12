@@ -31,17 +31,17 @@ type Page struct {
 	PageOptions
 }
 
-// InputFile returns the input string and is part of the part interface
+// InputFile returns the input string and is part of the page interface
 func (p *Page) InputFile() string {
 	return p.Input
 }
 
-// Args returns the argument slice and is part of the part interface
+// Args returns the argument slice and is part of the page interface
 func (p *Page) Args() []string {
 	return p.PageOptions.Args()
 }
 
-// Reader returns the io.Reader and is part of the part interface
+// Reader returns the io.Reader and is part of the page interface
 func (p *Page) Reader() io.Reader {
 	return nil
 }
@@ -61,17 +61,17 @@ type PageReader struct {
 	PageOptions
 }
 
-// InputFile returns the input string and is part of the part interface
+// InputFile returns the input string and is part of the page interface
 func (pr *PageReader) InputFile() string {
 	return "-"
 }
 
-// Args returns the argument slice and is part of the part interface
+// Args returns the argument slice and is part of the page interface
 func (pr *PageReader) Args() []string {
 	return pr.PageOptions.Args()
 }
 
-//Reader returns the io.Reader and is part of the part interface
+//Reader returns the io.Reader and is part of the page interface
 func (pr *PageReader) Reader() io.Reader {
 	return pr.Input
 }
