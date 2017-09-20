@@ -132,6 +132,15 @@ func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
+func TestPath(t *testing.T) {
+	path := "/usr/wkhtmltopdf/wkhtmltopdf"
+	SetPath(path)
+	defer SetPath("")
+	if GetPath() != path {
+		t.Errorf("Have path %q, want %q", GetPath(), path)
+	}
+}
+
 func BenchmarkArgs(b *testing.B) {
 	pdfg := newTestPDFGenerator(b)
 	b.ResetTimer()

@@ -13,8 +13,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm wkhtmltox-0.12.3_osx-cocoa-x86-64.pkg ; fi
 go:
   - tip
+  - 1.9
   - 1.8
-  - 1.7
 script: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .  
 os:
   - linux

@@ -11,18 +11,37 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
-var binPath string //the cached paths as used by findPath()
+//the cached mutexed path as used by findPath()
+type stringStore struct {
+	val string
+	sync.Mutex
+}
+
+func (ss *stringStore) Get() string {
+	ss.Lock()
+	defer ss.Unlock()
+	return ss.val
+}
+
+func (ss *stringStore) Set(s string) {
+	ss.Lock()
+	ss.val = s
+	ss.Unlock()
+}
+
+var binPath stringStore
 
 // SetPath sets the path to wkhtmltopdf
 func SetPath(path string) {
-	binPath = path
+	binPath.Set(path)
 }
 
 // GetPath gets the path to wkhtmltopdf
 func GetPath() string {
-	return binPath
+	return binPath.Get()
 }
 
 // Page is the input struct for each page
@@ -208,8 +227,8 @@ func (pdfg *PDFGenerator) WriteFile(filename string) error {
 //a running program once it has been found
 func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
-	if binPath != "" {
-		pdfg.binPath = binPath
+	if GetPath() != "" {
+		pdfg.binPath = GetPath()
 		return nil
 	}
 	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -218,13 +237,13 @@ func (pdfg *PDFGenerator) findPath() error {
 	}
 	path, err := exec.LookPath(filepath.Join(exeDir, exe))
 	if err == nil && path != "" {
-		binPath = path
+		binPath.Set(path)
 		pdfg.binPath = path
 		return nil
 	}
 	path, err = exec.LookPath(exe)
 	if err == nil && path != "" {
-		binPath = path
+		binPath.Set(path)
 		pdfg.binPath = path
 		return nil
 	}
@@ -234,7 +253,7 @@ func (pdfg *PDFGenerator) findPath() error {
 	}
 	path, err = exec.LookPath(filepath.Join(dir, exe))
 	if err == nil && path != "" {
-		binPath = path
+		binPath.Set(path)
 		pdfg.binPath = path
 		return nil
 	}

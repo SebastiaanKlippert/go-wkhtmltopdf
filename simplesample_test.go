@@ -14,7 +14,7 @@ func ExampleNewPDFGenerator() {
 	}
 
 	// Add one page from an URL
-	pdfg.AddPage(NewPage("https://github.com/SebastiaanKlippert/go-wkhtmltopdf"))
+	pdfg.AddPage(NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf"))
 
 	// Create PDF document in internal buffer
 	err = pdfg.Create()
