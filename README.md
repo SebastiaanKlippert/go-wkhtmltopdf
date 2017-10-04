@@ -95,6 +95,13 @@ func ExampleNewPDFGenerator() {
 }
 ```
 
+As mentioned before, you can provide one document from stdin, this is done by using a [PageReader](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#PageReader "GoDoc") object as input to AddPage. This is best constructed with  [NewPageReader](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#NewPageReader "GoDoc") and will accept any io.Reader so this can be used with files from disk (os.File) or memory (bytes.Buffer) etc.  
+As simple example snippet:
+```go
+	html := "<html>Hi</html>"
+	pdfgen.AddPage(NewPageReader(strings.NewReader(html)))
+```
+
 # Speed 
 The speed if pretty much determined by wkhtmltopdf itself, or if you use external source URLs, the time it takes to get and render the source HTML.
 
