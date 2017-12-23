@@ -7,6 +7,22 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm -rf wkhtmltox ; fi
+  # OSX
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_osx-cocoa-x86-64.pkg ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo installer -pkg wkhtmltox-0.12.4_osx-cocoa-x86-64.pkg -target / ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm wkhtmltox-0.12.4_osx-cocoa-x86-64.pkg ; fi
 go:
+  - tip
   - 1.9
+  - 1.8
 script: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .  
+os:
+  - linux
+  - osx
+matrix:
+  allow_failures:
+    - os: osx
+addons:
+  artifacts: true
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
