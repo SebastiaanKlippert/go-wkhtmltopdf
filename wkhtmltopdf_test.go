@@ -31,7 +31,7 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 
 	pdfg.AddPage(page1)
 
-	pdfg.Cover.Input = "http://wkhtmltopdf.org/index.html"
+	pdfg.Cover.Input = "https://wkhtmltopdf.org/index.html"
 	pdfg.Cover.Zoom.Set(0.75)
 
 	pdfg.TOC.Include = true
