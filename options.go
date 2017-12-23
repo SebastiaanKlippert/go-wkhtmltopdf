@@ -322,7 +322,7 @@ func newPageOptions() pageOptions {
 		EnableForms:               boolOption{option: "enable-forms"},
 		NoImages:                  boolOption{option: "no-images"},
 		DisableInternalLinks:      boolOption{option: "disable-internal-links"},
-		DisableJavascript:         boolOption{option: "disable-javascript "},
+		DisableJavascript:         boolOption{option: "disable-javascript"},
 		JavascriptDelay:           uintOption{option: "javascript-delay"},
 		LoadErrorHandling:         stringOption{option: "load-error-handling"},
 		LoadMediaErrorHandling:    stringOption{option: "load-media-error-handling"},
