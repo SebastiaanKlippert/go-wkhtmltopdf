@@ -195,6 +195,9 @@ func (pdfg *PDFGenerator) ArgString() string {
 // AddPage adds a new input page to the document.
 // A page is an input HTML page, it can span multiple pages in the output document.
 // It is a Page when read from file or URL or a PageReader when read from memory.
+
+// Add page function AddPage()
+
 func (pdfg *PDFGenerator) AddPage(p page) {
 	pdfg.pages = append(pdfg.pages, p)
 }
