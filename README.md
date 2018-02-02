@@ -65,33 +65,38 @@ package wkhtmltopdf
 import (
 	"fmt"
 	"log"
+    "strings"
+    wkhtml "github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
-func ExampleNewPDFGenerator() {
 
-	// Create new PDF generator
-	pdfg, err := NewPDFGenerator()
-	if err != nil {
-		log.Fatal(err)
-	}
+func main(){
 
-	// Add one page from an URL
-	pdfg.AddPage(NewPage("https://github.com/SebastiaanKlippert/go-wkhtmltopdf"))
 
-	// Create PDF document in internal buffer
-	err = pdfg.Create()
-	if err != nil {
-		log.Fatal(err)
-	}
+  pdfg, err :=  wkhtml.NewPDFGenerator()
+   if err != nil{
+	  return
+  }
+  <!-- Html String Working fine with Background Colour and Image-->
+  htmlStr := `<html><body><h1 style="color:red;">This is an html from pdf to test color<h1><img src="http://api.qrserver.com/v1/create-qr-code/?data=HelloWorld" alt="img" height="42" width="42"></img></body></html>`
 
-	// Write buffer contents to file on disk
-	err = pdfg.WriteFile("./simplesample.pdf")
-	if err != nil {
-		log.Fatal(err)
-	}
+  pdfg.AddPage(wkhtml.NewPageReader(strings.NewReader(htmlStr)))
 
-	fmt.Println("Done")
-	// Output: Done
+
+  // Create PDF document in internal buffer
+  err = pdfg.Create()
+  if err != nil {
+	  log.Fatal(err)
+  }
+
+  // Write buffer contents to file on disk
+  err = pdfg.WriteFile("./simplesample.pdf")
+  if err != nil {
+	  log.Fatal(err)
+  }
+
+  fmt.Println("Done")
+
 }
 ```
 
@@ -99,7 +104,11 @@ As mentioned before, you can provide one document from stdin, this is done by us
 A simple example snippet:
 ```go
 	html := "<html>Hi</html>"
-	pdfgen.AddPage(NewPageReader(strings.NewReader(html)))
+	pdfg, err :=  wkhtml.NewPDFGenerator()
+     if err != nil{
+    	  return
+     }
+	pdfgen.AddPage(wkhtml.NewPageReader(strings.NewReader(html)))
 ```
 
 # Speed 
