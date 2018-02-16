@@ -138,6 +138,7 @@ func (topt *tocOptions) Args() []string {
 
 type argParser interface {
 	Parse() []string //Used in the cmd call
+	Unset()
 }
 
 type stringOption struct {
@@ -159,6 +160,10 @@ func (so *stringOption) Set(value string) {
 	so.value = value
 }
 
+func (so *stringOption) Unset() {
+	so.value = ""
+}
+
 type sliceOption struct {
 	option string
 	value  []string
@@ -178,6 +183,10 @@ func (so sliceOption) Parse() []string {
 
 func (so *sliceOption) Set(value string) {
 	so.value = append(so.value, value)
+}
+
+func (so *sliceOption) Unset() {
+	so.value = nil
 }
 
 type mapOption struct {
@@ -205,6 +214,10 @@ func (mo *mapOption) Set(key, value string) {
 	mo.value[key] = value
 }
 
+func (mo *mapOption) Unset() {
+	mo.value = nil
+}
+
 type uintOption struct {
 	option string
 	value  uint
@@ -224,6 +237,10 @@ func (io uintOption) Parse() []string {
 func (io *uintOption) Set(value uint) {
 	io.isSet = true
 	io.value = value
+}
+
+func (io *uintOption) Unset() {
+	io.isSet = false
 }
 
 type floatOption struct {
@@ -247,6 +264,10 @@ func (fo *floatOption) Set(value float64) {
 	fo.value = value
 }
 
+func (fo *floatOption) Unset() {
+	fo.isSet = false
+}
+
 type boolOption struct {
 	option string
 	value  bool
@@ -261,6 +282,10 @@ func (bo boolOption) Parse() []string {
 
 func (bo *boolOption) Set(value bool) {
 	bo.value = value
+}
+
+func (bo *boolOption) Unset() {
+	bo.value = false
 }
 
 func newGlobalOptions() globalOptions {

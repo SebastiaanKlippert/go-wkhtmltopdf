@@ -169,6 +169,12 @@ func checkOption(t *testing.T, opt argParser, setFn func(), expected []string) {
 	if !reflect.DeepEqual(opt.Parse(), expected) {
 		t.Errorf("Arguments %q don't match expectation %q", opt.Parse(), expected)
 	}
+
+	opt.Unset()
+
+	if len(opt.Parse()) != 0 {
+		t.Errorf("Value after unsetting argument not empty: %q", opt.Parse())
+	}
 }
 
 func TestStringOption(t *testing.T) {
