@@ -2,7 +2,9 @@ package wkhtmltopdf
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -155,4 +157,79 @@ func BenchmarkArgs(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		pdfg.Args()
 	}
+}
+
+func checkOption(t *testing.T, opt argParser, setFn func(), expected []string) {
+	if len(opt.Parse()) != 0 {
+		t.Errorf("Default value for argument not empty: %q", opt.Parse())
+	}
+
+	setFn()
+
+	if !reflect.DeepEqual(opt.Parse(), expected) {
+		t.Errorf("Arguments %q don't match expectation %q", opt.Parse(), expected)
+	}
+}
+
+func TestStringOption(t *testing.T) {
+	opt := stringOption{
+		option: "sopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set("value99")
+	}, []string{"--sopt", "value99"})
+}
+
+func TestSliceOption(t *testing.T) {
+	opt := sliceOption{
+		option: "sliceopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set("string15183")
+		opt.Set("foo")
+		opt.Set("bar")
+	}, []string{"--sliceopt", "string15183", "--sliceopt", "foo", "--sliceopt", "bar"})
+}
+
+func TestMapOption(t *testing.T) {
+	opt := mapOption{
+		option: "mapopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set("k1", "foo")
+		opt.Set("bar", "hello")
+	}, []string{"--mapopt", "k1", "foo", "--mapopt", "bar", "hello"})
+}
+
+func TestUIntOption(t *testing.T) {
+	opt := uintOption{
+		option: "uintopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set(14860)
+	}, []string{"--uintopt", "14860"})
+}
+
+func TestFloatOption(t *testing.T) {
+	opt := floatOption{
+		option: "flopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set(239.75)
+	}, []string{"--flopt", fmt.Sprintf("%.3f", 239.75)})
+}
+
+func TestBoolOption(t *testing.T) {
+	opt := boolOption{
+		option: "bopt",
+	}
+
+	checkOption(t, &opt, func() {
+		opt.Set(true)
+	}, []string{"--bopt"})
 }
