@@ -146,7 +146,7 @@ type stringOption struct {
 }
 
 func (so stringOption) Parse() []string {
-	args := []string{}
+	args := make([]string, 0)
 	if so.value == "" {
 		return args
 	}
@@ -169,7 +169,7 @@ type sliceOption struct {
 }
 
 func (so sliceOption) Parse() []string {
-	args := []string{}
+	args := make([]string, 0)
 	if len(so.value) == 0 {
 		return args
 	}
@@ -194,7 +194,7 @@ type mapOption struct {
 }
 
 func (mo mapOption) Parse() []string {
-	args := []string{}
+	args := make([]string, 0)
 	if mo.value == nil || len(mo.value) == 0 {
 		return args
 	}
@@ -224,7 +224,7 @@ type uintOption struct {
 }
 
 func (io uintOption) Parse() []string {
-	args := []string{}
+	args := make([]string, 0)
 	if io.isSet == false {
 		return args
 	}
@@ -249,7 +249,7 @@ type floatOption struct {
 }
 
 func (fo floatOption) Parse() []string {
-	args := []string{}
+	args := make([]string, 0)
 	if fo.isSet == false {
 		return args
 	}
@@ -408,7 +408,7 @@ func newTocOptions() tocOptions {
 }
 
 func optsToArgs(opts interface{}) []string {
-	args := []string{}
+	args := make([]string, 0)
 	rv := reflect.Indirect(reflect.ValueOf(opts))
 	if rv.Kind() != reflect.Struct {
 		return args
