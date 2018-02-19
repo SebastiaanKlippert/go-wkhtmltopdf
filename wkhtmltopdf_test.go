@@ -159,7 +159,12 @@ func BenchmarkArgs(b *testing.B) {
 	}
 }
 
-func checkOption(t *testing.T, opt argParser, setFn func(), expected []string) {
+type unSetter interface {
+	argParser
+	Unset()
+}
+
+func checkOption(t *testing.T, opt unSetter, setFn func(), expected []string) {
 	if len(opt.Parse()) != 0 {
 		t.Errorf("Default value for argument not empty: %q", opt.Parse())
 	}
@@ -175,6 +180,7 @@ func checkOption(t *testing.T, opt argParser, setFn func(), expected []string) {
 	if len(opt.Parse()) != 0 {
 		t.Errorf("Value after unsetting argument not empty: %q", opt.Parse())
 	}
+
 }
 
 func TestStringOption(t *testing.T) {

@@ -138,7 +138,6 @@ func (topt *tocOptions) Args() []string {
 
 type argParser interface {
 	Parse() []string //Used in the cmd call
-	Unset()
 }
 
 type stringOption struct {
