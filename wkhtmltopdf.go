@@ -161,8 +161,7 @@ type PDFGenerator struct {
 
 //Args returns the commandline arguments as a string slice
 func (pdfg *PDFGenerator) Args() []string {
-	args := []string{}
-	args = append(args, pdfg.globalOptions.Args()...)
+	args := append([]string{}, pdfg.globalOptions.Args()...)
 	args = append(args, pdfg.outlineOptions.Args()...)
 	if pdfg.Cover.Input != "" {
 		args = append(args, "cover")
