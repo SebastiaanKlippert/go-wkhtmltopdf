@@ -6,12 +6,6 @@
 # go-wkhtmltopdf
 Golang commandline wrapper for wkhtmltopdf
 
-~~Work in progress, used internally only at this point.~~  
-~~No guarantees and **everything may change**.~~  
-Update 17-07-2016:  
-This package is now used in our production environment after a long test period so changes are unlikely.  
-Bugs wil be fixed as soon as they are found, but don't expect major changes from now on.  
-
 See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 
 # What and why
@@ -101,6 +95,17 @@ A simple example snippet:
 	html := "<html>Hi</html>"
 	pdfgen.AddPage(NewPageReader(strings.NewReader(html)))
 ```
+
+# Saving to and loading from JSON
+
+The package now has the possibility to save the PDF Generator object as JSON and to create
+a new PDF Generator from a JSON file.
+All options and pages are saved in JSON, pages added using NewPageReader are read and save as Base64 encoded strings
+in the JSON file.
+
+This is useful to prepare a PDF file and generate the actual PDF elsewhere, for example on AWS Lambda.
+To create PDF Generator on the client, where wkhtmltopdf might not be present, function `NewPDFPreparer` can be used.
+
 
 # Speed 
 The speed if pretty much determined by wkhtmltopdf itself, or if you use external source URLs, the time it takes to get and render the source HTML.

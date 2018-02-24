@@ -310,3 +310,22 @@ func NewPDFGenerator() (*PDFGenerator, error) {
 	err := pdfg.findPath()
 	return pdfg, err
 }
+
+// NewPDFPreparer returns a PDFGenerator object without looking for the wkhtmltopdf executable file.
+// This is useful to prepare a PDF file that is generated elsewhere and you just want to save the config as JSON.
+// Note that Create() can not be called on this object unless you call SetPath yourself.
+func NewPDFPreparer() *PDFGenerator {
+	return &PDFGenerator{
+		globalOptions:  newGlobalOptions(),
+		outlineOptions: newOutlineOptions(),
+		Cover: cover{
+			pageOptions: newPageOptions(),
+		},
+		TOC: toc{
+			allTocOptions: allTocOptions{
+				tocOptions:  newTocOptions(),
+				pageOptions: newPageOptions(),
+			},
+		},
+	}
+}
