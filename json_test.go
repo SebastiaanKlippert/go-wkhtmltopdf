@@ -26,7 +26,7 @@ func TestPDFGenerator_ToJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	l := 14114
+	l := 14090
 	if len(jb) != l {
 		t.Errorf("Want %d JSON bytes, have %d", l, len(jb))
 	}
