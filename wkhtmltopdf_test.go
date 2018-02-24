@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"reflect"
 	"runtime"
 	"strings"
@@ -47,12 +48,17 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 	return pdfg
 }
 
+func wantArgString() string {
+	return "--dpi 600 --margin-bottom 40 --margin-left 0 --page-size A4 cover https://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --viewport-size 3840x2160 --header-spacing 10.010 -"
+}
+
 func TestArgString(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
-	want := "--dpi 600 --margin-bottom 40 --margin-left 0 --page-size A4 cover https://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --viewport-size 3840x2160 --header-spacing 10.010 -"
-	if runtime.GOOS == "darwin" {
-		want = "--dpi 600 --margin-bottom 40 --margin-left 0 --page-size A4 cover https://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --load-error-handling ignore --disable-smart-shrinking --viewport-size 3840x2160 --header-spacing 10.010 -"
+	want := wantArgString()
+	if pdfg.ArgString() != want {
+		t.Errorf("Want argstring:\n%s\nHave:\n%s", want, pdfg.ArgString())
 	}
+	pdfg.SetPages(pdfg.pages)
 	if pdfg.ArgString() != want {
 		t.Errorf("Want argstring:\n%s\nHave:\n%s", want, pdfg.ArgString())
 	}
@@ -120,6 +126,43 @@ func TestGeneratePdfFromStdinSimple(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
+	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
+		t.Errorf("Buffersize not equal")
+	}
+}
+
+func TestPDFGeneratorOutputFile(t *testing.T) {
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer htmlfile.Close()
+
+	pdfg.OutputFile = "./testfiles/TestPDFGeneratorOutputFile.pdf"
+
+	pdfg.AddPage(NewPageReader(htmlfile))
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	pdfFile, err := os.Open("./testfiles/TestPDFGeneratorOutputFile.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer pdfFile.Close()
+
+	stat, err := pdfFile.Stat()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stat.Size() < 100 {
+		t.Errorf("generated PDF is size under 100 bytes")
+	}
 }
 
 func TestGeneratePdfFromStdinHtml5(t *testing.T) {
