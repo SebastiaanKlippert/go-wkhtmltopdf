@@ -100,12 +100,42 @@ A simple example snippet:
 
 The package now has the possibility to save the PDF Generator object as JSON and to create
 a new PDF Generator from a JSON file.
-All options and pages are saved in JSON, pages added using NewPageReader are read and save as Base64 encoded strings
+All options and pages are saved in JSON, pages added using NewPageReader are read to memory before saving and then saved as Base64 encoded strings
 in the JSON file.
 
 This is useful to prepare a PDF file and generate the actual PDF elsewhere, for example on AWS Lambda.
 To create PDF Generator on the client, where wkhtmltopdf might not be present, function `NewPDFPreparer` can be used.
 
+Use `NewPDFPreparer` to create a PDF Generator object on the client and `NewPDFGeneratorFromJSON` to reconstruct it on the server.
+
+```go 
+    // Client code
+    pdfg := NewPDFPreparer()
+    htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+    if err != nil {
+    	log.Fatal(err)
+    }
+    
+    pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
+    pdfg.Dpi.Set(600)
+    
+    // The contents of htmlsimple.html are saved as base64 string in the JSON file
+    jb, err := pdfg.ToJSON()
+    if err != nil {
+    	log.Fatal(err)
+    }
+    
+    // Server code
+    pdfgFromJSON, err := NewPDFGeneratorFromJSON(jb)
+    if err != nil {
+    	log.Fatal(err)
+    }
+    
+    err = pdfgFromJSON.Create()
+    if err != nil {
+    	log.Fatal(err)
+    }    
+```
 
 # Speed 
 The speed if pretty much determined by wkhtmltopdf itself, or if you use external source URLs, the time it takes to get and render the source HTML.
