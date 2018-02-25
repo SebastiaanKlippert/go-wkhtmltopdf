@@ -52,7 +52,7 @@ func ExampleNewPDFGeneratorFromJSON() {
 
 	// The JSON can be saved, uploaded, etc.
 
-	// Server code, create a new PDF generator from from JSON, also looks for the wkhtmltopdf executable
+	// Server code, create a new PDF generator from JSON, also looks for the wkhtmltopdf executable
 	pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jsonBytes))
 	if err != nil {
 		log.Fatal(err)
