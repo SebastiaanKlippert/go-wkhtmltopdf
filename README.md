@@ -137,6 +137,8 @@ Use `NewPDFPreparer` to create a PDF Generator object on the client and `NewPDFG
     }    
 ```
 
+For an example of running this in AWS Lambda see https://github.com/SebastiaanKlippert/go-wkhtmltopdf-lambda
+
 # Speed 
 The speed if pretty much determined by wkhtmltopdf itself, or if you use external source URLs, the time it takes to get and render the source HTML.
 
