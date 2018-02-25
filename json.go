@@ -23,7 +23,7 @@ type jsonPage struct {
 	Base64PageData string
 }
 
-// ToJSON create JSON of the complete representation of the PDFGenerator.
+// ToJSON creates JSON of the complete representation of the PDFGenerator.
 // It also saves all pages, for a PageReader page, the content is stored as a Base64 string in the JSON.
 func (pdfg *PDFGenerator) ToJSON() ([]byte, error) {
 
