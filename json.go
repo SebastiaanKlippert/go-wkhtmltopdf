@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 )
 
@@ -57,11 +58,11 @@ func (pdfg *PDFGenerator) ToJSON() ([]byte, error) {
 
 // NewPDFGeneratorFromJSON creates a new PDFGenerator and restores all the settings and pages
 // from a JSON byte slice which should be created using PDFGenerator.ToJSON().
-func NewPDFGeneratorFromJSON(jsonBytes []byte) (*PDFGenerator, error) {
+func NewPDFGeneratorFromJSON(jsonReader io.Reader) (*PDFGenerator, error) {
 
 	jp := new(jsonPDFGenerator)
 
-	err := json.Unmarshal(jsonBytes, jp)
+	err := json.NewDecoder(jsonReader).Decode(jp)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshaling JSON: %s", err)
 	}

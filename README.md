@@ -126,7 +126,7 @@ Use `NewPDFPreparer` to create a PDF Generator object on the client and `NewPDFG
     }
     
     // Server code
-    pdfgFromJSON, err := NewPDFGeneratorFromJSON(jb)
+    pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jb))
     if err != nil {
     	log.Fatal(err)
     }

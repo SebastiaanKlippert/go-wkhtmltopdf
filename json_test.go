@@ -44,7 +44,7 @@ func TestNewPDFGeneratorFromJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	pdfgFromJSON, err := NewPDFGeneratorFromJSON(jb)
+	pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jb))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestNewPDFGeneratorFromJSONWithReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	pdfgFromJSON, err := NewPDFGeneratorFromJSON(jb)
+	pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jb))
 	if err != nil {
 		t.Fatal(err)
 	}
