@@ -2,7 +2,6 @@ package wkhtmltopdf
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -202,50 +201,34 @@ func BenchmarkArgs(b *testing.B) {
 	}
 }
 
-type unSetter interface {
-	argParser
-	Unset()
-}
-
-func checkOption(t *testing.T, opt unSetter, setFn func(), expected []string) {
-	if len(opt.Parse()) != 0 {
-		t.Errorf("Default value for argument not empty: %q", opt.Parse())
-	}
-
-	setFn()
-
-	if !reflect.DeepEqual(opt.Parse(), expected) {
-		t.Errorf("Arguments %q don't match expectation %q", opt.Parse(), expected)
-	}
-
-	opt.Unset()
-
-	if len(opt.Parse()) != 0 {
-		t.Errorf("Value after unsetting argument not empty: %q", opt.Parse())
-	}
-
-}
-
 func TestStringOption(t *testing.T) {
 	opt := stringOption{
-		option: "sopt",
+		option: "stringopt",
+	}
+	opt.Set("value123")
+
+	want := []string{"--stringopt", "value123"}
+
+	if !reflect.DeepEqual(opt.Parse(), want) {
+		t.Errorf("expected %v, have %v", want, opt.Parse())
 	}
 
-	checkOption(t, &opt, func() {
-		opt.Set("value99")
-	}, []string{"--sopt", "value99"})
 }
 
 func TestSliceOption(t *testing.T) {
 	opt := sliceOption{
 		option: "sliceopt",
 	}
+	opt.Set("string15183")
+	opt.Set("foo")
+	opt.Set("bar")
 
-	checkOption(t, &opt, func() {
-		opt.Set("string15183")
-		opt.Set("foo")
-		opt.Set("bar")
-	}, []string{"--sliceopt", "string15183", "--sliceopt", "foo", "--sliceopt", "bar"})
+	want := []string{"--sliceopt", "string15183", "--sliceopt", "foo", "--sliceopt", "bar"}
+
+	if !reflect.DeepEqual(opt.Parse(), want) {
+		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
+
 }
 
 func TestMapOption(t *testing.T) {
@@ -253,38 +236,57 @@ func TestMapOption(t *testing.T) {
 		option: "mapopt",
 	}
 
-	checkOption(t, &opt, func() {
-		opt.Set("k1", "foo")
-		opt.Set("bar", "hello")
-	}, []string{"--mapopt", "k1", "foo", "--mapopt", "bar", "hello"})
+	opt.Set("key1", "foo")
+	opt.Set("key2", "bar")
+	opt.Set("key3", "Hello")
+
+	result := strings.Join(opt.Parse(), " ")
+	if !strings.Contains(result, "--mapopt key1 foo") {
+		t.Error("missing map option key1")
+	}
+	if !strings.Contains(result, "--mapopt key2 bar") {
+		t.Error("missing map option key2")
+	}
+	if !strings.Contains(result, "--mapopt key3 Hello") {
+		t.Error("missing map option key3")
+	}
 }
 
 func TestUIntOption(t *testing.T) {
 	opt := uintOption{
 		option: "uintopt",
 	}
+	opt.Set(14860)
 
-	checkOption(t, &opt, func() {
-		opt.Set(14860)
-	}, []string{"--uintopt", "14860"})
+	want := []string{"--uintopt", "14860"}
+
+	if !reflect.DeepEqual(opt.Parse(), want) {
+		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
 }
 
 func TestFloatOption(t *testing.T) {
 	opt := floatOption{
 		option: "flopt",
 	}
+	opt.Set(239.75)
 
-	checkOption(t, &opt, func() {
-		opt.Set(239.75)
-	}, []string{"--flopt", fmt.Sprintf("%.3f", 239.75)})
+	want := []string{"--flopt", "239.750"}
+
+	if !reflect.DeepEqual(opt.Parse(), want) {
+		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
 }
 
 func TestBoolOption(t *testing.T) {
 	opt := boolOption{
-		option: "bopt",
+		option: "boolopt",
 	}
+	opt.Set(true)
 
-	checkOption(t, &opt, func() {
-		opt.Set(true)
-	}, []string{"--bopt"})
+	want := []string{"--boolopt"}
+
+	if !reflect.DeepEqual(opt.Parse(), want) {
+		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
 }
