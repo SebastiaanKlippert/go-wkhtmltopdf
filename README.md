@@ -34,7 +34,7 @@ options for each input document.
 
 Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files.
 
-For us this is one of the easiest ways to genere PDF documents from Go(lang) and performance is very acceptable.
+For us this is one of the easiest ways to generate PDF documents from Go(lang) and performance is very acceptable.
 
 # Installation
 go get or use a Go dependency manager of your liking.
