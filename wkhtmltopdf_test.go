@@ -213,6 +213,10 @@ func TestStringOption(t *testing.T) {
 		t.Errorf("expected %v, have %v", want, opt.Parse())
 	}
 
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
+	}
 }
 
 func TestSliceOption(t *testing.T) {
@@ -229,6 +233,10 @@ func TestSliceOption(t *testing.T) {
 		t.Errorf("expected %v, have %v", want, opt.Parse())
 	}
 
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
+	}
 }
 
 func TestMapOption(t *testing.T) {
@@ -250,6 +258,11 @@ func TestMapOption(t *testing.T) {
 	if !strings.Contains(result, "--mapopt key3 Hello") {
 		t.Error("missing map option key3")
 	}
+
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
+	}
 }
 
 func TestUIntOption(t *testing.T) {
@@ -262,6 +275,11 @@ func TestUIntOption(t *testing.T) {
 
 	if !reflect.DeepEqual(opt.Parse(), want) {
 		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
+
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
 	}
 }
 
@@ -276,6 +294,11 @@ func TestFloatOption(t *testing.T) {
 	if !reflect.DeepEqual(opt.Parse(), want) {
 		t.Errorf("expected %v, have %v", want, opt.Parse())
 	}
+
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
+	}
 }
 
 func TestBoolOption(t *testing.T) {
@@ -288,5 +311,10 @@ func TestBoolOption(t *testing.T) {
 
 	if !reflect.DeepEqual(opt.Parse(), want) {
 		t.Errorf("expected %v, have %v", want, opt.Parse())
+	}
+
+	opt.Unset()
+	if !reflect.DeepEqual(opt.Parse(), []string{}) {
+		t.Errorf("not empty after unset")
 	}
 }
