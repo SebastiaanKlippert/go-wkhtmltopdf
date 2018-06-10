@@ -15,8 +15,21 @@ func ExampleNewPDFGenerator() {
 		log.Fatal(err)
 	}
 
-	// Add one page from an URL
-	pdfg.AddPage(NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf"))
+	// Set global options
+	pdfg.Dpi.Set(300)
+	pdfg.Orientation.Set(OrientationLandscape)
+	pdfg.Grayscale.Set(true)
+
+	// Create a new input page from an URL
+	page := NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf")
+
+	// Set options for this page
+	page.FooterRight.Set("[page]")
+	page.FooterFontSize.Set(10)
+	page.Zoom.Set(95.50)
+
+	// Add to document
+	pdfg.AddPage(page)
 
 	// Create PDF document in internal buffer
 	err = pdfg.Create()
