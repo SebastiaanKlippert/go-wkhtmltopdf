@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"reflect"
-	"runtime"
 	"strings"
 	"testing"
 )
@@ -31,10 +30,6 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 	page1.Allow.Set("/usr/local/images")
 	page1.CustomHeader.Set("X-AppKey", "abcdef")
 	page1.ViewportSize.Set("3840x2160")
-
-	if runtime.GOOS == "darwin" {
-		page1.LoadErrorHandling.Set("ignore")
-	}
 
 	pdfg.AddPage(page1)
 
