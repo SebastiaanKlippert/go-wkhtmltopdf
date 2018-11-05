@@ -226,8 +226,9 @@ func (pdfg *PDFGenerator) WriteFile(filename string) error {
 //a running program once it has been found
 func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
-	if GetPath() != "" {
-		pdfg.binPath = GetPath()
+	pdfg.binPath = GetPath()
+	if pdfg.binPath != "" {
+		// wkhtmltopdf has already already found, return
 		return nil
 	}
 	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
