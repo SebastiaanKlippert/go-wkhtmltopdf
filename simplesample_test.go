@@ -26,7 +26,7 @@ func ExampleNewPDFGenerator() {
 	// Set options for this page
 	page.FooterRight.Set("[page]")
 	page.FooterFontSize.Set(10)
-	page.Zoom.Set(95.50)
+	page.Zoom.Set(0.95)
 
 	// Add to document
 	pdfg.AddPage(page)
