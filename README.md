@@ -32,7 +32,7 @@ which contains the PDF output and you can feed one input document from an io.Rea
 You can combine any number or external HTML documents (HTTP(S) links) with at most one HTML document from stdin and set 
 options for each input document.
 
-Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files.
+Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files, or use the [SetOutput](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#PDFGenerator.SetOutput) method to pass any `io.Writer`.
 
 For us this is one of the easiest ways to generate PDF documents from Go(lang) and performance is very acceptable.
 
