@@ -217,8 +217,8 @@ func TestSetOutput(t *testing.T) {
 	}
 
 	b = outBuf.Bytes()
-	if len(b) < 6000 {
-		t.Errorf("expected to have > 6000 bytes in output buffer, have %d", len(b))
+	if len(b) < 3000 {
+		t.Errorf("expected to have > 3000 bytes in output buffer, have %d", len(b))
 	}
 }
 
