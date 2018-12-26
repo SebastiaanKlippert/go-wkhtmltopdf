@@ -154,9 +154,10 @@ type PDFGenerator struct {
 	TOC        toc
 	OutputFile string //filename to write to, default empty (writes to internal buffer)
 
-	binPath string
-	outbuf  bytes.Buffer
-	pages   []page
+	binPath   string
+	outbuf    bytes.Buffer
+	outWriter io.Writer
+	pages     []page
 }
 
 //Args returns the commandline arguments as a string slice
@@ -211,6 +212,12 @@ func (pdfg *PDFGenerator) Buffer() *bytes.Buffer {
 // Bytes returns the output byte slice from the output buffer used if OutputFile is empty
 func (pdfg *PDFGenerator) Bytes() []byte {
 	return pdfg.outbuf.Bytes()
+}
+
+// SetOutput sets the output to write the PDF to, when this method is called, the internal buffer will not be used,
+// so the Bytes(), Buffer() and WriteFile() methods will not work.
+func (pdfg *PDFGenerator) SetOutput(w io.Writer) {
+	pdfg.outWriter = w
 }
 
 // WriteFile writes the contents of the output buffer to a file
@@ -270,10 +277,16 @@ func (pdfg *PDFGenerator) run() error {
 	errbuf := &bytes.Buffer{}
 
 	cmd := exec.Command(pdfg.binPath, pdfg.Args()...)
-
-	cmd.Stdout = &pdfg.outbuf
 	cmd.Stderr = errbuf
-	//if there is a pageReader page (from Stdin) we set Stdin to that reader
+
+	// set output to the desired writer or the internal buffer
+	if pdfg.outWriter != nil {
+		cmd.Stdout = pdfg.outWriter
+	} else {
+		cmd.Stdout = &pdfg.outbuf
+	}
+
+	// if there is a pageReader page (from Stdin) we set Stdin to that reader
 	for _, page := range pdfg.pages {
 		if page.Reader() != nil {
 			cmd.Stdin = page.Reader()

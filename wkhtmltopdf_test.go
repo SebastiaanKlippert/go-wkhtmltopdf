@@ -188,11 +188,37 @@ func TestPath(t *testing.T) {
 	}
 }
 
-func BenchmarkArgs(b *testing.B) {
-	pdfg := newTestPDFGenerator(b)
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		pdfg.Args()
+func TestSetOutput(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer htmlfile.Close()
+
+	pdfg.AddPage(NewPageReader(htmlfile))
+
+	outBuf := new(bytes.Buffer)
+	pdfg.SetOutput(outBuf)
+
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	b := pdfg.Bytes()
+	if len(b) != 0 {
+		t.Errorf("expected to have zero bytes in internal buffer, have %d", len(b))
+	}
+
+	b = outBuf.Bytes()
+	if len(b) < 6000 {
+		t.Errorf("expected to have > 6000 bytes in output buffer, have %d", len(b))
 	}
 }
 
@@ -311,5 +337,13 @@ func TestBoolOption(t *testing.T) {
 	opt.Unset()
 	if !reflect.DeepEqual(opt.Parse(), []string{}) {
 		t.Errorf("not empty after unset")
+	}
+}
+
+func BenchmarkArgs(b *testing.B) {
+	pdfg := newTestPDFGenerator(b)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		pdfg.Args()
 	}
 }
