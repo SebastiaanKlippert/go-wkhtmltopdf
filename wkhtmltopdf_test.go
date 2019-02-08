@@ -179,6 +179,29 @@ func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
+func TestSetFooter(t *testing.T) {
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p1 := NewPage("https://www.google.com")
+	p1.FooterRight.Set("This is page [page]")
+	p1.FooterFontSize.Set(10)
+
+	pdfg.AddPage(p1)
+
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = pdfg.WriteFile("./testfiles/TestSetFooter.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
+}
+
 func TestPath(t *testing.T) {
 	path := "/usr/wkhtmltopdf/wkhtmltopdf"
 	SetPath(path)
