@@ -204,6 +204,12 @@ func (pdfg *PDFGenerator) SetPages(p []page) {
 	pdfg.pages = p
 }
 
+// ResetPages drops all pages previously added by AddPage or SetPages.
+// This allows reuse of current instance of PDFGenerator with all of it's configuration preserved.
+func (pdfg *PDFGenerator) ResetPages() {
+	pdfg.pages = []page{}
+}
+
 // Buffer returns the embedded output buffer used if OutputFile is empty
 func (pdfg *PDFGenerator) Buffer() *bytes.Buffer {
 	return &pdfg.outbuf
