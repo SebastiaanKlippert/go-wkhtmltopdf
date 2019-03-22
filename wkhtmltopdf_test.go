@@ -58,6 +58,31 @@ func TestArgString(t *testing.T) {
 	}
 }
 
+func TestResetPages(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Add 2 pages
+	pdfg.AddPage(NewPage("https://www.google.com"))
+	pdfg.AddPage(NewPage("https://www.github.com"))
+
+	// check that we have two pages
+	if len(pdfg.pages) != 2 {
+		t.Errorf("Want 2 pages, have %d", len(pdfg.pages))
+	}
+
+	// Reset
+	pdfg.ResetPages()
+
+	// check that we have no pages
+	if len(pdfg.pages) != 0 {
+		t.Errorf("Want 0 pages, have %d", len(pdfg.pages))
+	}
+}
+
 func TestVersion(t *testing.T) {
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
