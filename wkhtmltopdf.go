@@ -314,19 +314,7 @@ func (pdfg *PDFGenerator) run() error {
 // NewPDFGenerator returns a new PDFGenerator struct with all options created and
 // checks if wkhtmltopdf can be found on the system
 func NewPDFGenerator() (*PDFGenerator, error) {
-	pdfg := &PDFGenerator{
-		globalOptions:  newGlobalOptions(),
-		outlineOptions: newOutlineOptions(),
-		Cover: cover{
-			pageOptions: newPageOptions(),
-		},
-		TOC: toc{
-			allTocOptions: allTocOptions{
-				tocOptions:  newTocOptions(),
-				pageOptions: newPageOptions(),
-			},
-		},
-	}
+	pdfg := NewPDFPreparer()
 	err := pdfg.findPath()
 	return pdfg, err
 }
