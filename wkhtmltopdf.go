@@ -279,7 +279,6 @@ func (pdfg *PDFGenerator) Create() error {
 }
 
 func (pdfg *PDFGenerator) run() error {
-
 	errbuf := &bytes.Buffer{}
 
 	cmd := exec.Command(pdfg.binPath, pdfg.Args()...)
@@ -315,8 +314,7 @@ func (pdfg *PDFGenerator) run() error {
 // checks if wkhtmltopdf can be found on the system
 func NewPDFGenerator() (*PDFGenerator, error) {
 	pdfg := NewPDFPreparer()
-	err := pdfg.findPath()
-	return pdfg, err
+	return pdfg, pdfg.findPath()
 }
 
 // NewPDFPreparer returns a PDFGenerator object without looking for the wkhtmltopdf executable file.
