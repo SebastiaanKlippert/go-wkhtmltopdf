@@ -21,16 +21,16 @@ type globalOptions struct {
 	License           boolOption   // Output license information and exit
 	Lowquality        boolOption   // Generates lower quality pdf/ps. Useful to shrink the result document space
 	ManPage           boolOption   // Output program man page
-	MarginBottom      uintOption   // Set the page bottom margin
-	MarginLeft        uintOption   // Set the page left margin (default 10mm)
-	MarginRight       uintOption   // Set the page right margin (default 10mm)
-	MarginTop         uintOption   // Set the page top margin
+	MarginBottom      floatOption   // Set the page bottom margin
+	MarginLeft        floatOption   // Set the page left margin (default 10mm)
+	MarginRight       floatOption   // Set the page right margin (default 10mm)
+	MarginTop         floatOption   // Set the page top margin
 	NoCollate         boolOption   // Do not collate when printing multiple copies (default collate)
 	NoPdfCompression  boolOption   // Do not use lossless compression on pdf objects
 	Orientation       stringOption // Set orientation to Landscape or Portrait (default Portrait)
-	PageHeight        uintOption   // Page height
+	PageHeight        floatOption   // Page height
 	PageSize          stringOption // Set paper size to: A4, Letter, etc. (default A4)
-	PageWidth         uintOption   // Page width
+	PageWidth         floatOption   // Page width
 	Quiet             boolOption   // Be less verbose
 	ReadArgsFromStdin boolOption   // Read command line arguments from stdin
 	Readme            boolOption   // Output program readme
@@ -308,16 +308,16 @@ func newGlobalOptions() globalOptions {
 		License:           boolOption{option: "license"},
 		Lowquality:        boolOption{option: "lowquality"},
 		ManPage:           boolOption{option: "manpage"},
-		MarginBottom:      uintOption{option: "margin-bottom"},
-		MarginLeft:        uintOption{option: "margin-left"},
-		MarginRight:       uintOption{option: "margin-right"},
-		MarginTop:         uintOption{option: "margin-top"},
+		MarginBottom:      floatOption{option: "margin-bottom"},
+		MarginLeft:        floatOption{option: "margin-left"},
+		MarginRight:       floatOption{option: "margin-right"},
+		MarginTop:         floatOption{option: "margin-top"},
 		NoCollate:         boolOption{option: "nocollate"},
 		NoPdfCompression:  boolOption{option: "no-pdf-compression"},
 		Orientation:       stringOption{option: "orientation"},
-		PageHeight:        uintOption{option: "page-height"},
+		PageHeight:        floatOption{option: "page-height"},
 		PageSize:          stringOption{option: "page-size"},
-		PageWidth:         uintOption{option: "page-width"},
+		PageWidth:         floatOption{option: "page-width"},
 		Quiet:             boolOption{option: "quiet"},
 		ReadArgsFromStdin: boolOption{option: "read-args-from-stdin"},
 		Readme:            boolOption{option: "readme"},
