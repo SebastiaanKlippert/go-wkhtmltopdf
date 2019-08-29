@@ -157,6 +157,7 @@ type PDFGenerator struct {
 	binPath   string
 	outbuf    bytes.Buffer
 	outWriter io.Writer
+	stdErr    io.Writer
 	pages     []page
 }
 
@@ -226,6 +227,13 @@ func (pdfg *PDFGenerator) SetOutput(w io.Writer) {
 	pdfg.outWriter = w
 }
 
+// SetStderr sets the output writer for Stderr when running the wkhtmltopdf command. You only need to call this when you
+// want to print the output of wkhtmltopdf (like the progress messages in verbose mode). If not called, or if w is nil, the
+// output of Stderr is kept in an internal buffer and returned as error message if there was an error when calling wkhtmltopdf.
+func (pdfg *PDFGenerator) SetStderr(w io.Writer) {
+	pdfg.stdErr = w
+}
+
 // WriteFile writes the contents of the output buffer to a file
 func (pdfg *PDFGenerator) WriteFile(filename string) error {
 	return ioutil.WriteFile(filename, pdfg.Bytes(), 0666)
@@ -279,10 +287,16 @@ func (pdfg *PDFGenerator) Create() error {
 }
 
 func (pdfg *PDFGenerator) run() error {
-	errbuf := &bytes.Buffer{}
-
+	// create command
 	cmd := exec.Command(pdfg.binPath, pdfg.Args()...)
-	cmd.Stderr = errbuf
+
+	// set stderr to the provided writer, or create a new buffer
+	var errBuf *bytes.Buffer
+	cmd.Stderr = pdfg.stdErr
+	if cmd.Stderr == nil {
+		errBuf = new(bytes.Buffer)
+		cmd.Stderr = errBuf
+	}
 
 	// set output to the desired writer or the internal buffer
 	if pdfg.outWriter != nil {
@@ -299,13 +313,17 @@ func (pdfg *PDFGenerator) run() error {
 		}
 	}
 
+	// run cmd to create the PDF
 	err := cmd.Run()
 	if err != nil {
-		errStr := errbuf.String()
-		if strings.TrimSpace(errStr) == "" {
-			errStr = err.Error()
+		// on an error, return the contents of Stderr if it was our own buffer
+		// if Stderr was set to a custom writer, just return err
+		if errBuf != nil {
+			if errStr := errBuf.String(); strings.TrimSpace(errStr) != "" {
+				return errors.New(errStr)
+			}
 		}
-		return errors.New(errStr)
+		return err
 	}
 	return nil
 }

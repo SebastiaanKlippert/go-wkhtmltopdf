@@ -236,7 +236,7 @@ func TestPath(t *testing.T) {
 	}
 }
 
-func TestSetOutput(t *testing.T) {
+func TestPDFGenerator_SetOutput(t *testing.T) {
 	//Use a new blank PDF generator
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
@@ -267,6 +267,39 @@ func TestSetOutput(t *testing.T) {
 	b = outBuf.Bytes()
 	if len(b) < 3000 {
 		t.Errorf("expected to have > 3000 bytes in output buffer, have %d", len(b))
+	}
+}
+
+func TestPDFGenerator_SetStderr(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer htmlfile.Close()
+
+	pdfg.AddPage(NewPageReader(htmlfile))
+
+	errBuf := new(bytes.Buffer)
+	pdfg.SetStderr(errBuf)
+
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// not sure if this is correct for all versions of wkhtmltopdf and if it is always in English
+	outputStr := errBuf.String()
+	shouldContain := []string{"Loading pages", "Printing pages"}
+	for _, s := range shouldContain {
+		if strings.Contains(outputStr, s) == false {
+			t.Errorf("Stderr should contain %q, but it does not", s)
+		}
 	}
 }
 
