@@ -3,9 +3,9 @@ sudo: required
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y openssl build-essential xorg libssl-dev xfonts-75dpi; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget --quiet "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i "wkhtmltox_0.12.5-1.trusty_amd64.deb" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm "wkhtmltox_0.12.5-1.trusty_amd64.deb" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget --quiet "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i "wkhtmltox_0.12.5-1.bionic_amd64.deb" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm "wkhtmltox_0.12.5-1.bionic_amd64.deb" ; fi
 go:
   - tip
   - 1.13
@@ -13,6 +13,7 @@ go:
 script: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .
 os:
   - linux
+dist: bionic
 addons:
   artifacts: true
 after_success:
