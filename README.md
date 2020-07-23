@@ -1,4 +1,4 @@
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/SebastiaanKlippert/go-wkhtmltopdf)
+[![PkgGoDev](https://pkg.go.dev/badge/SebastiaanKlippert/go-wkhtmltopdf)](https://pkg.go.dev/SebastiaanKlippert/go-wkhtmltopdf)
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](http://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf)
 [![Build Status](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf.svg?branch=master)](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf)
 [![Go Report Card](https://goreportcard.com/badge/SebastiaanKlippert/go-wkhtmltopdf)](https://goreportcard.com/report/SebastiaanKlippert/go-wkhtmltopdf)
@@ -59,56 +59,56 @@ See testfile ```wkhtmltopdf_test.go``` for more complex options, a common use ca
 package wkhtmltopdf
 
 import (
-    "fmt"
-    "log"
+  "fmt"
+  "log"
 )
 
 func ExampleNewPDFGenerator() {
 
-	// Create new PDF generator
-	pdfg, err := NewPDFGenerator()
-	if err != nil {
-		log.Fatal(err)
-	}
+  // Create new PDF generator
+  pdfg, err := NewPDFGenerator()
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	// Set global options
-	pdfg.Dpi.Set(300)
-	pdfg.Orientation.Set(OrientationLandscape)
-	pdfg.Grayscale.Set(true)
+  // Set global options
+  pdfg.Dpi.Set(300)
+  pdfg.Orientation.Set(OrientationLandscape)
+  pdfg.Grayscale.Set(true)
 
-	// Create a new input page from an URL
-	page := NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf")
+  // Create a new input page from an URL
+  page := NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf")
 
-	// Set options for this page
-	page.FooterRight.Set("[page]")
-	page.FooterFontSize.Set(10)
-	page.Zoom.Set(0.95)
+  // Set options for this page
+  page.FooterRight.Set("[page]")
+  page.FooterFontSize.Set(10)
+  page.Zoom.Set(0.95)
 
-	// Add to document
-	pdfg.AddPage(page)
+  // Add to document
+  pdfg.AddPage(page)
 
-	// Create PDF document in internal buffer
-	err = pdfg.Create()
-	if err != nil {
-		log.Fatal(err)
-	}
+  // Create PDF document in internal buffer
+  err = pdfg.Create()
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	// Write buffer contents to file on disk
-	err = pdfg.WriteFile("./simplesample.pdf")
-	if err != nil {
-		log.Fatal(err)
-	}
+  // Write buffer contents to file on disk
+  err = pdfg.WriteFile("./simplesample.pdf")
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	fmt.Println("Done")
-	// Output: Done
+  fmt.Println("Done")
+  // Output: Done
 }
 ```
 
 As mentioned before, you can provide one document from stdin, this is done by using a [PageReader](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#PageReader "GoDoc") object as input to AddPage. This is best constructed with  [NewPageReader](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#NewPageReader "GoDoc") and will accept any io.Reader so this can be used with files from disk (os.File) or memory (bytes.Buffer) etc.  
 A simple example snippet:
 ```go
-	html := "<html>Hi</html>"
-	pdfgen.AddPage(NewPageReader(strings.NewReader(html)))
+html := "<html>Hi</html>"
+pdfgen.AddPage(NewPageReader(strings.NewReader(html)))
 ```
 
 # Saving to and loading from JSON
@@ -124,32 +124,32 @@ To create PDF Generator on the client, where wkhtmltopdf might not be present, f
 Use `NewPDFPreparer` to create a PDF Generator object on the client and `NewPDFGeneratorFromJSON` to reconstruct it on the server.
 
 ```go 
-    // Client code
-    pdfg := NewPDFPreparer()
-    htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
-    if err != nil {
-    	log.Fatal(err)
-    }
+// Client code
+pdfg := NewPDFPreparer()
+htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+if err != nil {
+  log.Fatal(err)
+}
     
-    pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
-    pdfg.Dpi.Set(600)
+pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
+pdfg.Dpi.Set(600)
     
-    // The contents of htmlsimple.html are saved as base64 string in the JSON file
-    jb, err := pdfg.ToJSON()
-    if err != nil {
-    	log.Fatal(err)
-    }
+// The contents of htmlsimple.html are saved as base64 string in the JSON file
+jb, err := pdfg.ToJSON()
+if err != nil {
+  log.Fatal(err)
+}
     
-    // Server code
-    pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jb))
-    if err != nil {
-    	log.Fatal(err)
-    }
+// Server code
+pdfgFromJSON, err := NewPDFGeneratorFromJSON(bytes.NewReader(jb))
+if err != nil {
+  log.Fatal(err)
+}
     
-    err = pdfgFromJSON.Create()
-    if err != nil {
-    	log.Fatal(err)
-    }    
+err = pdfgFromJSON.Create()
+if err != nil {
+  log.Fatal(err)
+}    
 ```
 
 For an example of running this in AWS Lambda see https://github.com/SebastiaanKlippert/go-wkhtmltopdf-lambda
