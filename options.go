@@ -19,7 +19,8 @@ type globalOptions struct {
 	ImageDpi          uintOption   // When embedding images scale them down to this dpi (default 600)
 	ImageQuality      uintOption   // When jpeg compressing images use this quality (default 94)
 	License           boolOption   // Output license information and exit
-	Lowquality        boolOption   // Generates lower quality pdf/ps. Useful to shrink the result document space
+	LogLevel          stringOption // Set log level to: none, error, warn or info (default info)
+	LowQuality        boolOption   // Generates lower quality pdf/ps. Useful to shrink the result document space
 	ManPage           boolOption   // Output program man page
 	MarginBottom      uintOption   // Set the page bottom margin
 	MarginLeft        uintOption   // Set the page left margin (default 10mm)
@@ -70,6 +71,7 @@ type pageOptions struct {
 	DisableLocalFileAccess    boolOption   // Do not allowed conversion of a local file to read in other local files, unless explicitly allowed with --allow
 	DisableSmartShrinking     boolOption   // Disable the intelligent shrinking strategy used by WebKit that makes the pixel/dpi ratio none constant
 	EnableForms               boolOption   // Turn HTML form fields into pdf form fields
+	EnableLocalFileAccess     boolOption   // Allowed conversion of a local file to read in other local files
 	EnablePlugins             boolOption   // Enable installed plugins (plugins will likely not work)
 	EnableTocBackLinks        boolOption   // Link from section header to toc
 	Encoding                  stringOption // Set the default text encoding, for input
@@ -89,6 +91,7 @@ type pageOptions struct {
 	PostFile                  mapOption    // Post an additional file (repeatable)
 	PrintMediaType            boolOption   // Use print media-type instead of screen
 	Proxy                     stringOption // Use a proxy
+	ProxyHostnameLookup       boolOption   // Use the proxy for resolving hostnames
 	RadiobuttonCheckedSvg     stringOption // Use this SVG file when rendering checked radiobuttons
 	RadiobuttonSvg            stringOption // Use this SVG file when rendering unchecked radiobuttons
 	RunScript                 sliceOption  // Run this additional javascript after the page is done loading (repeatable)
@@ -301,18 +304,19 @@ func newGlobalOptions() globalOptions {
 		Dpi:               uintOption{option: "dpi"},
 		ExtendedHelp:      boolOption{option: "extended-help"},
 		Grayscale:         boolOption{option: "grayscale"},
-		Help:              boolOption{option: "true"},
+		Help:              boolOption{option: "help"},
 		HTMLDoc:           boolOption{option: "htmldoc"},
 		ImageDpi:          uintOption{option: "image-dpi"},
 		ImageQuality:      uintOption{option: "image-quality"},
 		License:           boolOption{option: "license"},
-		Lowquality:        boolOption{option: "lowquality"},
+		LogLevel:          stringOption{option: "log-level"},
+		LowQuality:        boolOption{option: "lowquality"},
 		ManPage:           boolOption{option: "manpage"},
 		MarginBottom:      uintOption{option: "margin-bottom"},
 		MarginLeft:        uintOption{option: "margin-left"},
 		MarginRight:       uintOption{option: "margin-right"},
 		MarginTop:         uintOption{option: "margin-top"},
-		NoCollate:         boolOption{option: "nocollate"},
+		NoCollate:         boolOption{option: "no-collate"},
 		NoPdfCompression:  boolOption{option: "no-pdf-compression"},
 		Orientation:       stringOption{option: "orientation"},
 		PageHeight:        uintOption{option: "page-height"},
@@ -353,6 +357,7 @@ func newPageOptions() pageOptions {
 		DisableLocalFileAccess:    boolOption{option: "disable-local-file-access"},
 		DisableSmartShrinking:     boolOption{option: "disable-smart-shrinking"},
 		EnableForms:               boolOption{option: "enable-forms"},
+		EnableLocalFileAccess:     boolOption{option: "enable-local-file-access"},
 		EnablePlugins:             boolOption{option: "enable-plugins"},
 		EnableTocBackLinks:        boolOption{option: "enable-toc-back-links"},
 		Encoding:                  stringOption{option: "encoding"},
@@ -372,17 +377,18 @@ func newPageOptions() pageOptions {
 		PostFile:                  mapOption{option: "post-file"},
 		PrintMediaType:            boolOption{option: "print-media-type"},
 		Proxy:                     stringOption{option: "proxy"},
-		RadiobuttonCheckedSvg: stringOption{option: "radiobutton-checked-svg"},
-		RadiobuttonSvg:        stringOption{option: "radiobutton-svg"},
-		RunScript:             sliceOption{option: "run-script"},
-		SslCrtPath:            stringOption{option: "ssl-crt-path"},
-		SslKeyPassword:        stringOption{option: "ssl-key-password"},
-		SslKeyPath:            stringOption{option: "ssl-key-path"},
-		Username:              stringOption{option: "username"},
-		UserStyleSheet:        stringOption{option: "user-style-sheet"},
-		ViewportSize:          stringOption{option: "viewport-size"},
-		WindowStatus:          stringOption{option: "window-status"},
-		Zoom:                  floatOption{option: "zoom"},
+		ProxyHostnameLookup:       boolOption{option: "proxy-hostname-lookup"},
+		RadiobuttonCheckedSvg:     stringOption{option: "radiobutton-checked-svg"},
+		RadiobuttonSvg:            stringOption{option: "radiobutton-svg"},
+		RunScript:                 sliceOption{option: "run-script"},
+		SslCrtPath:                stringOption{option: "ssl-crt-path"},
+		SslKeyPassword:            stringOption{option: "ssl-key-password"},
+		SslKeyPath:                stringOption{option: "ssl-key-path"},
+		Username:                  stringOption{option: "username"},
+		UserStyleSheet:            stringOption{option: "user-style-sheet"},
+		ViewportSize:              stringOption{option: "viewport-size"},
+		WindowStatus:              stringOption{option: "window-status"},
+		Zoom:                      floatOption{option: "zoom"},
 	}
 }
 
