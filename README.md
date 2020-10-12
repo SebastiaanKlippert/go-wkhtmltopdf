@@ -30,7 +30,7 @@ you have page and TOC options for each page.
 
 Secondly it makes usage in server-type applications easier, every instance (PDF process) has its own output buffer 
 which contains the PDF output and you can feed one input document from an io.Reader (using stdin in wkhtmltopdf).
-You can combine any number or external HTML documents (HTTP(S) links) with at most one HTML document from stdin and set 
+You can combine any number of external HTML documents (HTTP(S) links) with at most one HTML document from stdin and set 
 options for each input document.
 
 Note: You can also ignore the internal buffer and let wkhtmltopdf write directly to disk if required for large files, or use the [SetOutput](https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf#PDFGenerator.SetOutput) method to pass any `io.Writer`.
