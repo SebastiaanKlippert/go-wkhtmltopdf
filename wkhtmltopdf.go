@@ -324,6 +324,10 @@ func (pdfg *PDFGenerator) run(ctx context.Context) error {
 	// run cmd to create the PDF
 	err := cmd.Run()
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
+
 		// on an error, return the contents of Stderr if it was our own buffer
 		// if Stderr was set to a custom writer, just return err
 		if errBuf != nil {

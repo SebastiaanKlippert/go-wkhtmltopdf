@@ -147,12 +147,8 @@ func TestContextCancellation(t *testing.T) {
 	errBuf := new(bytes.Buffer)
 	pdfg.SetStderr(errBuf)
 	err = pdfg.CreateContext(ctx)
-	if err == nil || err.Error() != "signal: killed" {
-		t.Errorf("Error should be `signal: killed` but is `%v`", err)
-	}
-
-	if ctxErr := ctx.Err(); ctxErr == nil || ctxErr.Error() != "context deadline exceeded" {
-		t.Errorf("Context error should be `context deadline exceeded` but is `%v`", ctxErr)
+	if err == nil || err.Error() != "context deadline exceeded" {
+		t.Errorf("Error should be `context deadline exceeded` but is `%v`", err)
 	}
 }
 
