@@ -2,11 +2,13 @@ package wkhtmltopdf
 
 import (
 	"bytes"
+	"context"
 	"io/ioutil"
 	"os"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
@@ -123,6 +125,31 @@ func TestGeneratePDF(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
+}
+
+func TestContextCancellation(t *testing.T) {
+	pdfg := newTestPDFGenerator(t)
+	htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	htmlPage := NewPageReader(bytes.NewReader(htmlfile))
+	// WindowStatus waits for page window status to be set to specified value,
+	// only then it'd render PDF. In our case, it'd never happen and context
+	// cancellation should cancel the request.
+	htmlPage.WindowStatus.Set("dummy-status")
+	ctx, cancelFunc := context.WithTimeout(context.TODO(), 200*time.Millisecond)
+	defer cancelFunc()
+
+	pdfg.AddPage(htmlPage)
+
+	errBuf := new(bytes.Buffer)
+	pdfg.SetStderr(errBuf)
+	err = pdfg.CreateContext(ctx)
+	if err == nil || err.Error() != "context deadline exceeded" {
+		t.Errorf("Error should be `context deadline exceeded` but is `%v`", err)
+	}
 }
 
 func TestGeneratePdfFromStdinSimple(t *testing.T) {

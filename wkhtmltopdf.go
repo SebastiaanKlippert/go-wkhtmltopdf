@@ -3,6 +3,7 @@ package wkhtmltopdf
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -285,12 +286,17 @@ func (pdfg *PDFGenerator) findPath() error {
 
 // Create creates the PDF document and stores it in the internal buffer if no error is returned
 func (pdfg *PDFGenerator) Create() error {
-	return pdfg.run()
+	return pdfg.run(context.TODO())
 }
 
-func (pdfg *PDFGenerator) run() error {
+// Create creates the PDF document and stores it in the internal buffer if no error is returned
+func (pdfg *PDFGenerator) CreateContext(ctx context.Context) error {
+	return pdfg.run(ctx)
+}
+
+func (pdfg *PDFGenerator) run(ctx context.Context) error {
 	// create command
-	cmd := exec.Command(pdfg.binPath, pdfg.Args()...)
+	cmd := exec.CommandContext(ctx, pdfg.binPath, pdfg.Args()...)
 
 	// set stderr to the provided writer, or create a new buffer
 	var errBuf *bytes.Buffer
@@ -318,6 +324,10 @@ func (pdfg *PDFGenerator) run() error {
 	// run cmd to create the PDF
 	err := cmd.Run()
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
+
 		// on an error, return the contents of Stderr if it was our own buffer
 		// if Stderr was set to a custom writer, just return err
 		if errBuf != nil {
