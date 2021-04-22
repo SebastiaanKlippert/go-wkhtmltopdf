@@ -8,8 +8,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm "wkhtmltox_0.12.6-1.bionic_amd64.deb" ; fi
 go:
   - tip
+  - 1.16
   - 1.15
-  - 1.14
 script: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .
 os:
   - linux

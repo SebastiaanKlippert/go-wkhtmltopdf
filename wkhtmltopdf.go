@@ -286,10 +286,10 @@ func (pdfg *PDFGenerator) findPath() error {
 
 // Create creates the PDF document and stores it in the internal buffer if no error is returned
 func (pdfg *PDFGenerator) Create() error {
-	return pdfg.run(context.TODO())
+	return pdfg.run(context.Background())
 }
 
-// Create creates the PDF document and stores it in the internal buffer if no error is returned
+// CreateContext is Create with a context passed to exec.CommandContext when calling wkhtmltopdf
 func (pdfg *PDFGenerator) CreateContext(ctx context.Context) error {
 	return pdfg.run(ctx)
 }
