@@ -143,6 +143,9 @@ func TestContextCancellation(t *testing.T) {
 	defer cancelFunc()
 
 	pdfg.AddPage(htmlPage)
+
+	errBuf := new(bytes.Buffer)
+	pdfg.SetStderr(errBuf)
 	err = pdfg.CreateContext(ctx)
 	if err == nil || err.Error() != "signal: killed" {
 		t.Errorf("Error should be `signal: killed` but is `%v`", err)
