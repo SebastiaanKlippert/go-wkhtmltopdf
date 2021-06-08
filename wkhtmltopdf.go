@@ -141,12 +141,12 @@ type cover struct {
 type toc struct {
 	Include bool
 	allTocOptions
-	headerAndFooterOptions
 }
 
 type allTocOptions struct {
 	pageOptions
 	tocOptions
+	headerAndFooterOptions
 }
 
 // PDFGenerator is the main wkhtmltopdf struct, always use NewPDFGenerator to obtain a new PDFGenerator struct
