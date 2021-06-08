@@ -141,6 +141,7 @@ type cover struct {
 type toc struct {
 	Include bool
 	allTocOptions
+	headerAndFooterOptions
 }
 
 type allTocOptions struct {
@@ -177,6 +178,7 @@ func (pdfg *PDFGenerator) Args() []string {
 		args = append(args, "toc")
 		args = append(args, pdfg.TOC.pageOptions.Args()...)
 		args = append(args, pdfg.TOC.tocOptions.Args()...)
+		args = append(args, pdfg.TOC.headerAndFooterOptions.Args()...)
 	}
 	for _, page := range pdfg.pages {
 		args = append(args, "page")
@@ -361,6 +363,7 @@ func NewPDFPreparer() *PDFGenerator {
 			allTocOptions: allTocOptions{
 				tocOptions:  newTocOptions(),
 				pageOptions: newPageOptions(),
+				headerAndFooterOptions: newHeaderAndFooterOptions(),
 			},
 		},
 	}
