@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:outline="http://wkhtmltopdf.org/outline"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <xsl:output doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+                doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitiona
+l.dtd"
+                indent="yes" />
+    <xsl:template match="outline:outline">
+        <html>
+            <head>
+                <title>TOC</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <style>
+.toc-title {
+	font-size: 22px;
+    padding-top: 2mm;
+    padding-bottom: 5mm;
+    margin-left: 16mm;
+	color: grey;
+}
+
+li {
+	list-style: none;
+}
+
+ul {
+    margin-right: -7mm;
+    position: relative;
+}
+
+a {
+    text-decoration: none;    
+}
+
+.chapter-link {
+    font-size: 4mm;
+    font-weight:bold;
+    color: blue;
+    padding: 6mm 6mm 6mm 6mm;
+}
+
+li {
+    position: relative;
+    background: lightgrey;
+    padding: 6mm 6mm 6mm 6mm;
+    margin-bottom: 3mm;
+}
+
+li img {
+    position: absolute;
+    left: 0mm;
+    top: 3mm;
+    width: 10mm;
+    height: 10mm;
+    background: red;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.page-number {
+    float: right;
+    color: blue;
+    padding-right: 20mm;
+    font-size: 6mm;
+    font-weight:bold;
+    margin-top: -1mm;
+}
+</style>
+            </head>
+            <body>
+                <h1 class="toc-title">TOC</h1>
+                <ul>
+                <xsl:apply-templates select="outline:item/outline:item"/>
+                
+        <li class="list-decoration"></li></ul>
+            </body>
+        </html>
+    </xsl:template>
+    <xsl:template match="outline:item">
+    <xsl:if test="@title!='TOC'">
+        <li>
+
+                <xsl:if test="contains(@title, 'elements')">
+         
+                <img src="https://picsum.photos/200/200"/>
+                </xsl:if>
+
+                    <a class="chapter-link">                
+                        <xsl:if test="@link">
+                            <xsl:attribute name="href"><xsl:value-of select="@link"/></xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="@backLink">
+                            <xsl:attribute name="name"><xsl:value-of select="@backLink"/></xsl:attribute>
+                        </xsl:if>
+                        <xsl:value-of select="@title" />
+                    </a>
+
+                    <a class="page-number">
+                                            <xsl:if test="@link">
+                            <xsl:attribute name="href"><xsl:value-of select="@link"/></xsl:attribute>
+                        </xsl:if>
+                    PAGE <xsl:value-of select="@page" />   
+                    </a>
+
+        </li>
+    </xsl:if>
+    </xsl:template>
+</xsl:stylesheet>

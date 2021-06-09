@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/footer.js"></script>
+    <style>
+
+        body {
+            margin: 0 10mm;
+        }
+
+        #pageFooter {
+            padding-top: 3mm;
+            padding-bottom: 5mm;
+            font-weight: bold;
+            border-top: 0.5mm solid grey;
+        }
+
+        #pageFooter .page-number {
+            position: absolute;
+            bottom: 6mm;
+            font-size: 5mm;
+            color: grey;
+            text-align: left;
+            vertical-align: bottom;
+            font-family: Verdana sans-serif;
+            font-weight: bold;
+        }
+
+        #footer-data {
+            font-size: 2.7mm;
+            line-height: 4mm;
+            color: blue;
+            text-align: center;
+            vertical-align: bottom;
+            font-family: Verdana sans-serif;
+        }
+
+        #footer-data a {
+            color: blue;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body onload="footer()">
+
+<div id="pageFooter" >
+    <div class="page-number page"></div>
+    <div id="footer-data">
+        <a href="https://example.com">example.com</a>
+        <br/>
+        <strong>TOC FOOTER</strong>
+    </div>
+</div>
+
+</body>
+</html>
