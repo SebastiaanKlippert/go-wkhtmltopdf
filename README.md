@@ -1,5 +1,5 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/SebastiaanKlippert/go-wkhtmltopdf)](https://pkg.go.dev/github.com/SebastiaanKlippert/go-wkhtmltopdf)
-[![Build Status](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf.svg?branch=master)](https://travis-ci.org/SebastiaanKlippert/go-wkhtmltopdf)
+[![Build Status](https://travis-ci.com/SebastiaanKlippert/go-wkhtmltopdf.svg?branch=master)](https://travis-ci.com/SebastiaanKlippert/go-wkhtmltopdf)
 [![Go Report Card](https://goreportcard.com/badge/SebastiaanKlippert/go-wkhtmltopdf)](https://goreportcard.com/report/SebastiaanKlippert/go-wkhtmltopdf)
 [![codebeat badge](https://codebeat.co/badges/a6bb7f66-7ae2-4de8-8b61-623ef68096c9)](https://codebeat.co/projects/github-com-sebastiaanklippert-go-wkhtmltopdf-master)
 [![codecov](https://codecov.io/gh/SebastiaanKlippert/go-wkhtmltopdf/branch/master/graph/badge.svg)](https://codecov.io/gh/SebastiaanKlippert/go-wkhtmltopdf)
@@ -125,7 +125,7 @@ Use `NewPDFPreparer` to create a PDF Generator object on the client and `NewPDFG
 ```go 
 // Client code
 pdfg := NewPDFPreparer()
-htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
 if err != nil {
   log.Fatal(err)
 }

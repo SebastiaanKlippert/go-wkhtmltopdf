@@ -9,10 +9,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
-
 	pdfg, err := NewPDFGenerator()
 	if err != nil {
 		tb.Fatal(err)
@@ -32,6 +34,7 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 	page1.Allow.Set("/usr/local/images")
 	page1.CustomHeader.Set("X-AppKey", "abcdef")
 	page1.ViewportSize.Set("3840x2160")
+	page1.EnableLocalFileAccess.Set(true)
 
 	pdfg.AddPage(page1)
 
@@ -44,20 +47,16 @@ func newTestPDFGenerator(tb testing.TB) *PDFGenerator {
 	return pdfg
 }
 
-func wantArgString() string {
-	return "--dpi 600 --margin-bottom 40 --margin-left 0 --page-size A4 cover https://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --viewport-size 3840x2160 --header-spacing 10.010 -"
+func expectedArgString() string {
+	return "--dpi 600 --margin-bottom 40 --margin-left 0 --page-size A4 cover https://wkhtmltopdf.org/index.html --zoom 0.750 toc --disable-dotted-lines page https://www.google.com --allow /usr/local/html --allow /usr/local/images --custom-header X-AppKey abcdef --disable-smart-shrinking --enable-local-file-access --viewport-size 3840x2160 --header-spacing 10.010 -"
 }
 
 func TestArgString(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
-	want := wantArgString()
-	if pdfg.ArgString() != want {
-		t.Errorf("Want argstring:\n%s\nHave:\n%s", want, pdfg.ArgString())
-	}
+	assert.Equal(t, expectedArgString(), pdfg.ArgString())
+
 	pdfg.SetPages(pdfg.pages)
-	if pdfg.ArgString() != want {
-		t.Errorf("Want argstring:\n%s\nHave:\n%s", want, pdfg.ArgString())
-	}
+	assert.Equal(t, expectedArgString(), pdfg.ArgString())
 }
 
 func TestResetPages(t *testing.T) {
@@ -117,19 +116,17 @@ func TestNoInput(t *testing.T) {
 func TestGeneratePDF(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
 	err := pdfg.Create()
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = pdfg.WriteFile("./testfiles/TestGeneratePDF.pdf")
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
+
+	err = pdfg.WriteFile("testdata/TestGeneratePDF.pdf")
+	require.NoError(t, err)
+
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
 func TestContextCancellation(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
-	htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+	htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -158,7 +155,7 @@ func TestGeneratePdfFromStdinSimple(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	htmlfile, err := ioutil.ReadFile("./testfiles/htmlsimple.html")
+	htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -167,7 +164,7 @@ func TestGeneratePdfFromStdinSimple(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = pdfg.WriteFile("./testfiles/TestGeneratePdfFromStdinSimple.pdf")
+	err = pdfg.WriteFile("testdata/TestGeneratePdfFromStdinSimple.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -182,13 +179,13 @@ func TestPDFGeneratorOutputFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	htmlfile, err := os.Open("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer htmlfile.Close()
 
-	pdfg.OutputFile = "./testfiles/TestPDFGeneratorOutputFile.pdf"
+	pdfg.OutputFile = "testdata/TestPDFGeneratorOutputFile.pdf"
 
 	pdfg.AddPage(NewPageReader(htmlfile))
 	err = pdfg.Create()
@@ -196,7 +193,7 @@ func TestPDFGeneratorOutputFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	pdfFile, err := os.Open("./testfiles/TestPDFGeneratorOutputFile.pdf")
+	pdfFile, err := os.Open("testdata/TestPDFGeneratorOutputFile.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -214,17 +211,20 @@ func TestPDFGeneratorOutputFile(t *testing.T) {
 func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	//Use newTestPDFGenerator and append to page1 and TOC
 	pdfg := newTestPDFGenerator(t)
-	htmlfile, err := ioutil.ReadFile("./testfiles/html5.html")
+	htmlfile, err := ioutil.ReadFile("testdata/html5.html")
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	page2 := NewPageReader(bytes.NewReader(htmlfile))
+	page2.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page2)
+
 	err = pdfg.Create()
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = pdfg.WriteFile("./testfiles/TestGeneratePdfFromStdinHtml5.pdf")
+	err = pdfg.WriteFile("testdata/TestGeneratePdfFromStdinHtml5.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -247,7 +247,7 @@ func TestSetFooter(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = pdfg.WriteFile("./testfiles/TestSetFooter.pdf")
+	err = pdfg.WriteFile("testdata/TestSetFooter.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -270,7 +270,7 @@ func TestPDFGenerator_SetOutput(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	htmlfile, err := os.Open("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -304,7 +304,7 @@ func TestPDFGenerator_SetStderr(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	htmlfile, err := os.Open("./testfiles/htmlsimple.html")
+	htmlfile, err := os.Open("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -337,7 +337,7 @@ func TestTOCAndCustomFooter(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	htmlfile, err := os.Open("./testfiles/html5.html")
+	htmlfile, err := os.Open("testdata/html5.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -346,13 +346,13 @@ func TestTOCAndCustomFooter(t *testing.T) {
 	page.EnableLocalFileAccess.Set(true) //needed to include js
 	pdfg.AddPage(page)
 
-	page.FooterHTML.Set("./testfiles/footer.html")
+	page.FooterHTML.Set("testdata/footer.html")
 	page.FooterSpacing.Set(8)
 
-	pdfg.TOC.XslStyleSheet.Set("./testfiles/toc.xls")
+	pdfg.TOC.XslStyleSheet.Set("testdata/toc.xls")
 	pdfg.TOC.Include = true
 	pdfg.TOC.EnableLocalFileAccess.Set(true) //needed to include js
-	pdfg.TOC.FooterHTML.Set("./testfiles/footer-toc.html")
+	pdfg.TOC.FooterHTML.Set("testdata/footer-toc.html")
 	pdfg.TOC.FooterSpacing.Set(8)
 
 	err = pdfg.Create()
@@ -361,7 +361,7 @@ func TestTOCAndCustomFooter(t *testing.T) {
 	}
 
 	// Write buffer contents to file on disk
-	err = pdfg.WriteFile("./testfiles/TestGeneratePdfTOCAndCustomFooter.pdf")
+	err = pdfg.WriteFile("testdata/TestGeneratePdfTOCAndCustomFooter.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}
