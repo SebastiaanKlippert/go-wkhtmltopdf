@@ -330,6 +330,43 @@ func TestPDFGenerator_SetStderr(t *testing.T) {
 	}
 }
 
+func TestTOCAndCustomFooter(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	htmlfile, err := os.Open("./testfiles/html5.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer htmlfile.Close()
+	page := NewPageReader(htmlfile)
+	page.EnableLocalFileAccess.Set(true) //needed to include js
+	pdfg.AddPage(page)
+
+	page.FooterHTML.Set("./testfiles/footer.html")
+	page.FooterSpacing.Set(8)
+
+	pdfg.TOC.XslStyleSheet.Set("./testfiles/toc.xls")
+	pdfg.TOC.Include = true
+	pdfg.TOC.EnableLocalFileAccess.Set(true) //needed to include js
+	pdfg.TOC.FooterHTML.Set("./testfiles/footer-toc.html")
+	pdfg.TOC.FooterSpacing.Set(8)
+
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Write buffer contents to file on disk
+	err = pdfg.WriteFile("./testfiles/TestGeneratePdfTOCAndCustomFooter.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestStringOption(t *testing.T) {
 	opt := stringOption{
 		option: "stringopt",
