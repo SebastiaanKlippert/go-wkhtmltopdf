@@ -30,6 +30,12 @@ jobs:
     - name: Test
       run: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .
 
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: TestPDFs
+        path: '**/*.pdf'
+
     - name: CodeCov
       uses: codecov/codecov-action@v2
       with:
