@@ -13,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install wkthtmltopdf
-      run: brew install wkthtmltopdf
+    - name: Install wkhtmltopdf
+      run: brew install wkhtmltopdf
 
     - name: Set up Go
       uses: actions/setup-go@v2
