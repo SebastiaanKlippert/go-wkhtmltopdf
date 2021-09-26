@@ -3,8 +3,8 @@
 [![codebeat badge](https://codebeat.co/badges/a6bb7f66-7ae2-4de8-8b61-623ef68096c9)](https://codebeat.co/projects/github-com-sebastiaanklippert-go-wkhtmltopdf-master)
 [![codecov](https://codecov.io/gh/SebastiaanKlippert/go-wkhtmltopdf/branch/master/graph/badge.svg)](https://codecov.io/gh/SebastiaanKlippert/go-wkhtmltopdf)
 
-[![Build Status](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions?query=branch%3Amaster+workflow%3A%22Ubuntu+build+%26+test%22)
-[![Build Status](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions?query=branch%3Amaster+workflow%3A"macOS+build+%26+test")
+[![Build Status](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/ubuntu.yml)
+[![Build Status](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/SebastiaanKlippert/go-wkhtmltopdf/actions/workflows/macos.yml)
 
 # go-wkhtmltopdf
 Golang commandline wrapper for wkhtmltopdf
