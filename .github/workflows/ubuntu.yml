@@ -2,7 +2,10 @@ name: Ubuntu build & test
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - feature/*
+      - issue/*
   pull_request:
     branches: [ master ]
 

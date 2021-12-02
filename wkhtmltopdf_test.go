@@ -254,6 +254,30 @@ func TestSetFooter(t *testing.T) {
 	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
 }
 
+func TestSetFooterIssue76(t *testing.T) {
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+	page := NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf")
+
+	page.FooterRight.Set("[page]")
+	page.FooterFontSize.Set(10)
+	page.Zoom.Set(0.95)
+
+	pdfg.AddPage(page)
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = pdfg.WriteFile("testdata/TestSetFooterIssue76.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("PDF size %vkB", len(pdfg.Bytes())/1024)
+}
+
 func TestPath(t *testing.T) {
 	path := "/usr/wkhtmltopdf/wkhtmltopdf"
 	SetPath(path)
