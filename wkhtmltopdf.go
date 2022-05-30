@@ -264,7 +264,7 @@ func (pdfg *PDFGenerator) findPath() error {
 	path, err := exec.LookPath(filepath.Join(exeDir, exe))
 	if err == nil && path != "" {
 		binPath.Set(path)
-		pdfg.binPath = path
+		pdfg.binPath = exe
 		return nil
 	}
 	path, err = exec.LookPath(exe)
@@ -361,8 +361,8 @@ func NewPDFPreparer() *PDFGenerator {
 		},
 		TOC: toc{
 			allTocOptions: allTocOptions{
-				tocOptions:  newTocOptions(),
-				pageOptions: newPageOptions(),
+				tocOptions:             newTocOptions(),
+				pageOptions:            newPageOptions(),
 				headerAndFooterOptions: newHeaderAndFooterOptions(),
 			},
 		},
