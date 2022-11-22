@@ -126,7 +126,7 @@ func TestGeneratePDF(t *testing.T) {
 
 func TestContextCancellation(t *testing.T) {
 	pdfg := newTestPDFGenerator(t)
-	htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
+	htmlfile, err := os.ReadFile("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -155,7 +155,7 @@ func TestGeneratePdfFromStdinSimple(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
+	htmlfile, err := os.ReadFile("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -365,6 +365,42 @@ func TestTOCAndCustomFooter(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestBufferReset(t *testing.T) {
+	// Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Add one page
+	htmlfile, err := os.ReadFile("testdata/htmlsimple.html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
+
+	// Create PDF
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Test if the internal buffer is not emty
+	bufSize := pdfg.Buffer().Len()
+	assert.Greater(t, bufSize, 0)
+
+	// Reset pages and run same Create() again
+	pdfg.ResetPages()
+	pdfg.AddPage(NewPageReader(bytes.NewReader(htmlfile)))
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Test is Buffer Size is equal to size of previous Create()
+	assert.Equal(t, bufSize, pdfg.Buffer().Len())
 }
 
 func TestStringOption(t *testing.T) {

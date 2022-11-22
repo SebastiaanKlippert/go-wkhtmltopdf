@@ -15,7 +15,7 @@ import (
 	"sync"
 )
 
-//the cached mutexed path as used by findPath()
+// the cached mutexed path as used by findPath()
 type stringStore struct {
 	val string
 	sync.Mutex
@@ -91,7 +91,7 @@ func (pr *PageReader) Args() []string {
 	return pr.PageOptions.Args()
 }
 
-//Reader returns the io.Reader and is part of the page interface
+// Reader returns the io.Reader and is part of the page interface
 func (pr *PageReader) Reader() io.Reader {
 	return pr.Input
 }
@@ -165,7 +165,7 @@ type PDFGenerator struct {
 	pages     []PageProvider
 }
 
-//Args returns the commandline arguments as a string slice
+// Args returns the commandline arguments as a string slice
 func (pdfg *PDFGenerator) Args() []string {
 	args := append([]string{}, pdfg.globalOptions.Args()...)
 	args = append(args, pdfg.outlineOptions.Args()...)
@@ -244,12 +244,12 @@ func (pdfg *PDFGenerator) WriteFile(filename string) error {
 	return ioutil.WriteFile(filename, pdfg.Bytes(), 0666)
 }
 
-//findPath finds the path to wkhtmltopdf by
-//- first looking in the current dir
-//- looking in the PATH and PATHEXT environment dirs
-//- using the WKHTMLTOPDF_PATH environment dir
-//The path is cached, meaning you can not change the location of wkhtmltopdf in
-//a running program once it has been found
+// findPath finds the path to wkhtmltopdf by
+// - first looking in the current dir
+// - looking in the PATH and PATHEXT environment dirs
+// - using the WKHTMLTOPDF_PATH environment dir
+// The path is cached, meaning you can not change the location of wkhtmltopdf in
+// a running program once it has been found
 func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
 	pdfg.binPath = GetPath()
@@ -312,6 +312,7 @@ func (pdfg *PDFGenerator) run(ctx context.Context) error {
 	if pdfg.outWriter != nil {
 		cmd.Stdout = pdfg.outWriter
 	} else {
+		pdfg.outbuf.Reset() // reset internal buffer when we use it
 		cmd.Stdout = &pdfg.outbuf
 	}
 
@@ -361,8 +362,8 @@ func NewPDFPreparer() *PDFGenerator {
 		},
 		TOC: toc{
 			allTocOptions: allTocOptions{
-				tocOptions:  newTocOptions(),
-				pageOptions: newPageOptions(),
+				tocOptions:             newTocOptions(),
+				pageOptions:            newPageOptions(),
 				headerAndFooterOptions: newHeaderAndFooterOptions(),
 			},
 		},
