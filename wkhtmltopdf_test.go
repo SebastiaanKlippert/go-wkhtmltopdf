@@ -407,6 +407,8 @@ func TestBufferReset(t *testing.T) {
 }
 
 func TestFindPath(t *testing.T) {
+	defer func() { lookPath = exec.LookPath }()
+
 	pdfgen := new(PDFGenerator)
 
 	// lookpath finds a result immediately
