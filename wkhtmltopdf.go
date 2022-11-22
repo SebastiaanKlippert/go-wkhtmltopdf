@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -241,8 +240,10 @@ func (pdfg *PDFGenerator) SetStderr(w io.Writer) {
 
 // WriteFile writes the contents of the output buffer to a file
 func (pdfg *PDFGenerator) WriteFile(filename string) error {
-	return ioutil.WriteFile(filename, pdfg.Bytes(), 0666)
+	return os.WriteFile(filename, pdfg.Bytes(), 0666)
 }
+
+var lookPath = exec.LookPath
 
 // findPath finds the path to wkhtmltopdf by
 // - first looking in the current dir
@@ -263,13 +264,13 @@ func (pdfg *PDFGenerator) findPath() error {
 	if err != nil {
 		return err
 	}
-	path, err := exec.LookPath(filepath.Join(exeDir, exe))
+	path, err := lookPath(filepath.Join(exeDir, exe))
 	if err == nil && path != "" {
 		binPath.Set(path)
 		pdfg.binPath = path
 		return nil
 	}
-	path, err = exec.LookPath(exe)
+	path, err = lookPath(exe)
 	if errors.Is(err, exec.ErrDot) {
 		return err
 	}
@@ -282,7 +283,10 @@ func (pdfg *PDFGenerator) findPath() error {
 	if dir == "" {
 		return fmt.Errorf("%s not found", exe)
 	}
-	path, err = exec.LookPath(filepath.Join(dir, exe))
+	path, err = lookPath(filepath.Join(dir, exe))
+	if errors.Is(err, exec.ErrDot) {
+		return err
+	}
 	if err == nil && path != "" {
 		binPath.Set(path)
 		pdfg.binPath = path

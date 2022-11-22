@@ -3,8 +3,11 @@ package wkhtmltopdf
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -401,6 +404,94 @@ func TestBufferReset(t *testing.T) {
 
 	// Test is Buffer Size is equal to size of previous Create()
 	assert.Equal(t, bufSize, pdfg.Buffer().Len())
+}
+
+func TestFindPath(t *testing.T) {
+	pdfgen := new(PDFGenerator)
+
+	// lookpath finds a result immediately
+	lookPath = func(file string) (string, error) {
+		return file, nil
+	}
+
+	binPath.Set("")
+	err := pdfgen.findPath()
+	assert.NoError(t, err)
+
+	// lookpath only returns a path when called with "wkhtmltopdf"
+	lookPath = func(file string) (string, error) {
+		if file == "wkhtmltopdf" {
+			return file, nil
+		}
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.NoError(t, err)
+	assert.Equal(t, "wkhtmltopdf", binPath.Get())
+
+	// lookpath returns exec.ErrDot when called with "wkhtmltopdf"
+	lookPath = func(file string) (string, error) {
+		if file == "wkhtmltopdf" {
+			return "", exec.ErrDot
+		}
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.Error(t, err)
+	assert.EqualError(t, err, exec.ErrDot.Error())
+
+	// lookpath only finds a path when "WKHTMLTOPDF_PATH" is included
+	const WKHTMLTOPDFPATH = "/fake/path"
+	os.Setenv("WKHTMLTOPDF_PATH", WKHTMLTOPDFPATH)
+	lookPath = func(file string) (string, error) {
+		if strings.HasPrefix(file, filepath.Clean(WKHTMLTOPDFPATH)) {
+			return file, nil
+		}
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.NoError(t, err)
+
+	// lookpath returns exec.ErrDot when "WKHTMLTOPDF_PATH" is included
+	lookPath = func(file string) (string, error) {
+		if strings.HasPrefix(file, filepath.Clean(WKHTMLTOPDFPATH)) {
+			return "", exec.ErrDot
+		}
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.Error(t, err)
+	assert.EqualError(t, err, exec.ErrDot.Error())
+
+	// lookpath always returns an error and WKHTMLTOPDF_PATH is empty
+	os.Setenv("WKHTMLTOPDF_PATH", "")
+	lookPath = func(file string) (string, error) {
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.Error(t, err)
+	assert.EqualError(t, err, "wkhtmltopdf not found")
+
+	// lookpath always returns an error and WKHTMLTOPDF_PATH is NOT empty
+	os.Setenv("WKHTMLTOPDF_PATH", WKHTMLTOPDFPATH)
+	lookPath = func(file string) (string, error) {
+		return "", errors.New("mock error")
+	}
+
+	binPath.Set("")
+	err = pdfgen.findPath()
+	assert.Error(t, err)
+	assert.EqualError(t, err, "wkhtmltopdf not found")
 }
 
 func TestStringOption(t *testing.T) {
