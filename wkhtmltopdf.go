@@ -248,13 +248,15 @@ func (pdfg *PDFGenerator) WriteFile(filename string) error {
 // - first looking in the current dir
 // - looking in the PATH and PATHEXT environment dirs
 // - using the WKHTMLTOPDF_PATH environment dir
+// Warning: Running executables from the current path is no longer possible in Go 1.19
+// See https://pkg.go.dev/os/exec@master#hdr-Executables_in_the_current_directory
 // The path is cached, meaning you can not change the location of wkhtmltopdf in
 // a running program once it has been found
 func (pdfg *PDFGenerator) findPath() error {
 	const exe = "wkhtmltopdf"
 	pdfg.binPath = GetPath()
 	if pdfg.binPath != "" {
-		// wkhtmltopdf has already already found, return
+		// wkhtmltopdf has already been found, return
 		return nil
 	}
 	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -268,6 +270,9 @@ func (pdfg *PDFGenerator) findPath() error {
 		return nil
 	}
 	path, err = exec.LookPath(exe)
+	if errors.Is(err, exec.ErrDot) {
+		return err
+	}
 	if err == nil && path != "" {
 		binPath.Set(path)
 		pdfg.binPath = path

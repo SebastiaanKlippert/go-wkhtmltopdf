@@ -51,6 +51,8 @@ go-wkhtmltopdf finds the path to wkhtmltopdf by
 * looking in the PATH and PATHEXT environment dirs
 * using the WKHTMLTOPDF_PATH environment dir
 
+**Warning**: Running executables from the current path is no longer possible in Go 1.19, see https://pkg.go.dev/os/exec@master#hdr-Executables_in_the_current_directory
+
 If you need to set your own wkhtmltopdf path or want to change it during execution, you can call SetPath().
 
 # Usage
