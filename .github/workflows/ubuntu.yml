@@ -10,6 +10,9 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.19', '1.18' ]
     steps:
     - uses: actions/checkout@v2
 
@@ -19,15 +22,15 @@ jobs:
         wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb
         sudo dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
+    - name: Set up Go ${{ matrix.go }}
+      uses: actions/setup-go@v3
       with:
-        go-version: 1.19
+        go-version: ${{ matrix.go }}
 
-    - name: Build
+    - name: Build ${{ matrix.go }}
       run: go build -v .
 
-    - name: Test
+    - name: Test ${{ matrix.go }}
       run: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .
 
     - name: Upload artifacts
