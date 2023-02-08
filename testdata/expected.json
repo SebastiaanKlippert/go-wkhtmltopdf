@@ -61,20 +61,36 @@
       "IsSet": true,
       "Value": 40
     },
+    "MarginBottomUnit": {
+      "Option": "margin-bottom",
+      "Value": ""
+    },
     "MarginLeft": {
       "Option": "margin-left",
       "IsSet": true,
       "Value": 0
+    },
+    "MarginLeftUnit": {
+      "Option": "margin-left",
+      "Value": ""
     },
     "MarginRight": {
       "Option": "margin-right",
       "IsSet": false,
       "Value": 0
     },
+    "MarginRightUnit": {
+      "Option": "margin-right",
+      "Value": ""
+    },
     "MarginTop": {
       "Option": "margin-top",
       "IsSet": false,
       "Value": 0
+    },
+    "MarginTopUnit": {
+      "Option": "margin-top",
+      "Value": ""
     },
     "NoCollate": {
       "Option": "no-collate",
@@ -93,6 +109,10 @@
       "IsSet": false,
       "Value": 0
     },
+    "PageHeightUnit": {
+      "Option": "page-height",
+      "Value": ""
+    },
     "PageSize": {
       "Option": "page-size",
       "Value": "A4"
@@ -101,6 +121,10 @@
       "Option": "page-width",
       "IsSet": false,
       "Value": 0
+    },
+    "PageWidthUnit": {
+      "Option": "page-width",
+      "Value": ""
     },
     "Quiet": {
       "Option": "quiet",

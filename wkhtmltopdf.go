@@ -295,6 +295,22 @@ func (pdfg *PDFGenerator) findPath() error {
 	return fmt.Errorf("%s not found", exe)
 }
 
+func (pdfg *PDFGenerator) checkDuplicateFlags() error {
+	// we currently can only have duplicates in the global options, so we only check these
+	var options []string
+	for _, arg := range pdfg.globalOptions.Args() {
+		if strings.HasPrefix(arg, "--") { // this is not ideal, the value could also have this prefix
+			for _, option := range options {
+				if option == arg {
+					return fmt.Errorf("duplicate argument: %s", arg)
+				}
+			}
+			options = append(options, arg)
+		}
+	}
+	return nil
+}
+
 // Create creates the PDF document and stores it in the internal buffer if no error is returned
 func (pdfg *PDFGenerator) Create() error {
 	return pdfg.run(context.Background())
@@ -306,6 +322,12 @@ func (pdfg *PDFGenerator) CreateContext(ctx context.Context) error {
 }
 
 func (pdfg *PDFGenerator) run(ctx context.Context) error {
+	// check for duplicate flags
+	err := pdfg.checkDuplicateFlags()
+	if err != nil {
+		return err
+	}
+
 	// create command
 	cmd := exec.CommandContext(ctx, pdfg.binPath, pdfg.Args()...)
 
@@ -334,7 +356,7 @@ func (pdfg *PDFGenerator) run(ctx context.Context) error {
 	}
 
 	// run cmd to create the PDF
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		if ctxErr := ctx.Err(); ctxErr != nil {
 			return ctxErr

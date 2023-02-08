@@ -28,7 +28,7 @@ func TestPDFGenerator_ToJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected, err := ioutil.ReadFile("testdata/expected.json")
+	expected, err := os.ReadFile("testdata/expected.json")
 	if err != nil {
 		t.Fatal(err)
 	}
