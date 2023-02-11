@@ -388,6 +388,17 @@ func TestUnitOptions(t *testing.T) {
 
 	want := `--margin-bottom 0.5cm --margin-left 2cm --margin-right 1mm --margin-top 10mm --page-height 10in --page-width 5.5in page https://www.google.com -`
 	assert.Equal(t, want, pdfg.ArgString())
+
+	err = pdfg.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Write buffer contents to file on disk
+	err = pdfg.WriteFile("testdata/TestUnitOptions.pdf")
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestDuplicateOptions(t *testing.T) {
