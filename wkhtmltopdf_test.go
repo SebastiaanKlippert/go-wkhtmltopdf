@@ -370,6 +370,42 @@ func TestTOCAndCustomFooter(t *testing.T) {
 	}
 }
 
+func TestUnitOptions(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	assert.NoError(t, err)
+
+	// Add a page
+	pdfg.AddPage(NewPage("https://www.google.com"))
+
+	// Set all unit options
+	pdfg.MarginRightUnit.Set("1mm")
+	pdfg.MarginLeftUnit.Set("2cm")
+	pdfg.MarginBottomUnit.Set("0.5cm")
+	pdfg.MarginTopUnit.Set("10mm")
+	pdfg.PageHeightUnit.Set("10in")
+	pdfg.PageWidthUnit.Set("5.5in")
+
+	want := `--margin-bottom 0.5cm --margin-left 2cm --margin-right 1mm --margin-top 10mm --page-height 10in --page-width 5.5in page https://www.google.com -`
+	assert.Equal(t, want, pdfg.ArgString())
+}
+
+func TestDuplicateOptions(t *testing.T) {
+	//Use a new blank PDF generator
+	pdfg, err := NewPDFGenerator()
+	assert.NoError(t, err)
+
+	// Add a page
+	pdfg.AddPage(NewPage("https://www.google.com"))
+
+	// Set a duplicate option (the value can be different)
+	pdfg.MarginRight.Set(1)
+	pdfg.MarginRightUnit.Set("1cm")
+
+	err = pdfg.Create()
+	assert.EqualError(t, err, "duplicate argument: --margin-right")
+}
+
 func TestBufferReset(t *testing.T) {
 	// Use a new blank PDF generator
 	pdfg, err := NewPDFGenerator()

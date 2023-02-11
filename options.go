@@ -7,7 +7,7 @@ import (
 
 const opt = "--"
 
-//A list of options that can be set from code to make it easier to see which options are available
+// A list of options that can be set from code to make it easier to see which options are available
 type globalOptions struct {
 	CookieJar         stringOption // Read and write cookies from and to the supplied cookie jar file
 	Copies            uintOption   // Number of copies to print into the pdf file (default 1)
@@ -22,16 +22,22 @@ type globalOptions struct {
 	LogLevel          stringOption // Set log level to: none, error, warn or info (default info)
 	LowQuality        boolOption   // Generates lower quality pdf/ps. Useful to shrink the result document space
 	ManPage           boolOption   // Output program man page
-	MarginBottom      uintOption   // Set the page bottom margin
+	MarginBottom      uintOption   // Set the page bottom margin in centimeters
+	MarginBottomUnit  stringOption // Set the page bottom margin with a unit
 	MarginLeft        uintOption   // Set the page left margin (default 10mm)
+	MarginLeftUnit    stringOption // Set the page left margin with a unit
 	MarginRight       uintOption   // Set the page right margin (default 10mm)
+	MarginRightUnit   stringOption // Set the page right margin with a unit
 	MarginTop         uintOption   // Set the page top margin
+	MarginTopUnit     stringOption // Set the page top margin with a unit
 	NoCollate         boolOption   // Do not collate when printing multiple copies (default collate)
 	NoPdfCompression  boolOption   // Do not use lossless compression on pdf objects
 	Orientation       stringOption // Set orientation to Landscape or Portrait (default Portrait)
 	PageHeight        uintOption   // Page height
+	PageHeightUnit    stringOption // Page height  with a unit
 	PageSize          stringOption // Set paper size to: A4, Letter, etc. (default A4)
 	PageWidth         uintOption   // Page width
+	PageWidthUnit     stringOption // Page width with a unit
 	Quiet             boolOption   // Be less verbose
 	ReadArgsFromStdin boolOption   // Read command line arguments from stdin
 	Readme            boolOption   // Output program readme
@@ -313,15 +319,21 @@ func newGlobalOptions() globalOptions {
 		LowQuality:        boolOption{option: "lowquality"},
 		ManPage:           boolOption{option: "manpage"},
 		MarginBottom:      uintOption{option: "margin-bottom"},
+		MarginBottomUnit:  stringOption{option: "margin-bottom"},
 		MarginLeft:        uintOption{option: "margin-left"},
+		MarginLeftUnit:    stringOption{option: "margin-left"},
 		MarginRight:       uintOption{option: "margin-right"},
+		MarginRightUnit:   stringOption{option: "margin-right"},
 		MarginTop:         uintOption{option: "margin-top"},
+		MarginTopUnit:     stringOption{option: "margin-top"},
 		NoCollate:         boolOption{option: "no-collate"},
 		NoPdfCompression:  boolOption{option: "no-pdf-compression"},
 		Orientation:       stringOption{option: "orientation"},
 		PageHeight:        uintOption{option: "page-height"},
+		PageHeightUnit:    stringOption{option: "page-height"},
 		PageSize:          stringOption{option: "page-size"},
 		PageWidth:         uintOption{option: "page-width"},
+		PageWidthUnit:     stringOption{option: "page-width"},
 		Quiet:             boolOption{option: "quiet"},
 		ReadArgsFromStdin: boolOption{option: "read-args-from-stdin"},
 		Readme:            boolOption{option: "readme"},
