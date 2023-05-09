@@ -11,6 +11,12 @@ Golang commandline wrapper for wkhtmltopdf
 
 See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 
+| :warning: WARNING          |
+|:---------------------------|
+| wkhtmltopdf is no longer maintained and now archived on GitHub. See https://wkhtmltopdf.org/status.html |
+| This go package is still maintained and will be for a while, but I recommend looking for alternatives for new projects. |
+
+
 # What and why
 We needed a way to generate PDF documents from Go. These vary from invoices with highly customizable lay-outs to reports with tables, graphs and images. In our opinion the best way to do this was by using HTML/CSS templates as source for our PDFs. Using CSS print media types and millimeters instead of pixel units we can generate very acurate PDF documents using wkhtmltopdf.
 
