@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 )
 
 type jsonPDFGenerator struct {
@@ -45,7 +44,7 @@ func (pdfg *PDFGenerator) ToJSON() ([]byte, error) {
 			jp.PageOptions = tp.PageOptions
 		}
 		if p.Reader() != nil {
-			buf, err := ioutil.ReadAll(p.Reader())
+			buf, err := io.ReadAll(p.Reader())
 			if err != nil {
 				return nil, err
 			}

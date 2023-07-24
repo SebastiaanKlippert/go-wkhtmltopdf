@@ -3,7 +3,7 @@ package wkhtmltopdf
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
 	"reflect"
 	"testing"
@@ -62,7 +62,7 @@ func TestNewPDFGeneratorFromJSON(t *testing.T) {
 func TestNewPDFGeneratorFromJSONWithReader(t *testing.T) {
 
 	pdfg := NewPDFPreparer()
-	htmlfile, err := ioutil.ReadFile("testdata/htmlsimple.html")
+	htmlfile, err := os.ReadFile("testdata/htmlsimple.html")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func TestNewPDFGeneratorFromJSONWithReader(t *testing.T) {
 	}
 
 	// assert content
-	buf, err := ioutil.ReadAll(pdfgFromJSON.pages[0].Reader())
+	buf, err := io.ReadAll(pdfgFromJSON.pages[0].Reader())
 	if err != nil {
 		t.Fatal(err)
 	}
