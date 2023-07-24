@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -214,7 +213,7 @@ func TestPDFGeneratorOutputFile(t *testing.T) {
 func TestGeneratePdfFromStdinHtml5(t *testing.T) {
 	//Use newTestPDFGenerator and append to page1 and TOC
 	pdfg := newTestPDFGenerator(t)
-	htmlfile, err := ioutil.ReadFile("testdata/html5.html")
+	htmlfile, err := os.ReadFile("testdata/html5.html")
 	if err != nil {
 		t.Fatal(err)
 	}
