@@ -362,11 +362,11 @@ func (pdfg *PDFGenerator) run(ctx context.Context) error {
 			return ctxErr
 		}
 
-		// on an error, return the contents of Stderr if it was our own buffer
+		// on an error, return the error and the contents of Stderr if it was our own buffer
 		// if Stderr was set to a custom writer, just return err
 		if errBuf != nil {
 			if errStr := errBuf.String(); strings.TrimSpace(errStr) != "" {
-				return errors.New(errStr)
+				return fmt.Errorf("%s\n%s", errStr, err)
 			}
 		}
 		return err
