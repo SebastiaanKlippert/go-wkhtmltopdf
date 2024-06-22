@@ -331,8 +331,8 @@ func (pdfg *PDFGenerator) run(ctx context.Context) error {
 	// create command
 	cmd := exec.CommandContext(ctx, pdfg.binPath, pdfg.Args()...)
 
-	// hide console window (windows only)
-	cmd.SysProcAttr = &syscall.SysProcAttr{CreationFlags: 0x08000000, HideWindow: true}
+	// configure the commande (different for each OS, windows only for now (hides the cmd console))
+	cmdConfig(cmd)
 
 	// set stderr to the provided writer, or create a new buffer
 	var errBuf *bytes.Buffer
