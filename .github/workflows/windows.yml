@@ -1,4 +1,4 @@
-name: Windows build & test
+name: Windows tests only
 
 on: workflow_dispatch
 
@@ -16,9 +16,6 @@ jobs:
       uses: actions/setup-go@v5.0.1
       with:
         go-version: stable
-
-    - name: Build
-      run: go build -v .
 
     - name: Test
       run: go test -v .
