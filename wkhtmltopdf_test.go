@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -127,7 +128,10 @@ func TestGeneratePDF(t *testing.T) {
 }
 
 func TestContextCancellation(t *testing.T) {
-	t.SkipNow()
+	if os.Getenv("GITHUB_ACTIONS") == "true" && runtime.GOOS == "windows" {
+		t.Skip("temporarily skipping on Windows Github actions, because it blocks. Most likely on due to WindowStatus being set, need to investigate")
+	}
+
 	pdfg := newTestPDFGenerator(t)
 	htmlfile, err := os.ReadFile("testdata/htmlsimple.html")
 	if err != nil {

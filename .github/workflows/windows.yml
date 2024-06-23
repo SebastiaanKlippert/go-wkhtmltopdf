@@ -1,4 +1,4 @@
-name: Windows tests only
+name: Windows manual tests
 
 on: workflow_dispatch
 
