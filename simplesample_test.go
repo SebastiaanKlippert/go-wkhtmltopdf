@@ -21,7 +21,7 @@ func ExampleNewPDFGenerator() {
 	pdfg.Grayscale.Set(true)
 
 	// Create a new input page from an URL
-	page := NewPage("https://godoc.org/github.com/SebastiaanKlippert/go-wkhtmltopdf")
+	page := NewPage("https://pkg.go.dev/github.com/SebastiaanKlippert/go-wkhtmltopdf?tab=licenses")
 
 	// Set options for this page
 	page.FooterRight.Set("[page]")
