@@ -14,6 +14,7 @@ See http://wkhtmltopdf.org/index.html for wkhtmltopdf docs.
 |:---------------------------|
 | wkhtmltopdf is no longer maintained and now archived on GitHub. See https://wkhtmltopdf.org/status.html |
 | This go package is still maintained and will be for a while, but I recommend looking for alternatives for new projects. |
+| For existing projects, [PDFKiln](https://github.com/pdfkiln/pdfkiln) installs a maintained, Chromium-based `wkhtmltopdf` command that this package can call unchanged. |
 
 
 # What and why
