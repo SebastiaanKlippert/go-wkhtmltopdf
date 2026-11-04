@@ -11,7 +11,7 @@ jobs:
   build-and-test:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v5.0.0
+    - uses: actions/checkout@v7
 
     - name: Download wkhtmltopdf pkg
       run: curl -L -o wkhtmltopdf.pkg "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-2/wkhtmltox-0.12.6-2.macos-cocoa.pkg"
@@ -23,7 +23,7 @@ jobs:
       run: wkhtmltopdf --version
 
     - name: Set up Go
-      uses: actions/setup-go@v6.0.0
+      uses: actions/setup-go@v7
       with:
         go-version: stable
 
@@ -34,7 +34,7 @@ jobs:
       run: go test -v .
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v5.0.0
+      uses: actions/upload-artifact@v7
       with:
         name: TestPDFs
         path: '**/*.pdf'
