@@ -11,7 +11,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5.0.0
+    - uses: actions/checkout@v7
 
     - name: Install wkhtmltopdf
       run: |
@@ -20,7 +20,7 @@ jobs:
         sudo dpkg -i wkhtmltox_0.12.6.1-2.jammy_amd64.deb
 
     - name: Set up Go
-      uses: actions/setup-go@v6.0.0
+      uses: actions/setup-go@v7
       with:
         go-version: stable
 
@@ -31,13 +31,13 @@ jobs:
       run: go test -v -coverprofile=coverage.txt -covermode=atomic -bench .
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v5.0.0
+      uses: actions/upload-artifact@v7
       with:
         name: TestPDFs
         path: '**/*.pdf'
 
     - name: CodeCov
-      uses: codecov/codecov-action@v5.5.1
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.txt
