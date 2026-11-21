@@ -23,21 +23,21 @@ type globalOptions struct {
 	LowQuality        boolOption   // Generates lower quality pdf/ps. Useful to shrink the result document space
 	ManPage           boolOption   // Output program man page
 	MarginBottom      uintOption   // Set the page bottom margin in centimeters
-	MarginBottomUnit  stringOption // Set the page bottom margin with a unit
+	MarginBottomUnit  stringOption // Set the page bottom margin with its unit, e.g. "10mm" (sets the same option as MarginBottom: use one)
 	MarginLeft        uintOption   // Set the page left margin (default 10mm)
-	MarginLeftUnit    stringOption // Set the page left margin with a unit
+	MarginLeftUnit    stringOption // Set the page left margin with its unit, e.g. "2cm" (sets the same option as MarginLeft: use one)
 	MarginRight       uintOption   // Set the page right margin (default 10mm)
-	MarginRightUnit   stringOption // Set the page right margin with a unit
+	MarginRightUnit   stringOption // Set the page right margin with its unit, e.g. "1cm" (sets the same option as MarginRight: use one)
 	MarginTop         uintOption   // Set the page top margin
-	MarginTopUnit     stringOption // Set the page top margin with a unit
+	MarginTopUnit     stringOption // Set the page top margin with its unit, e.g. "10mm" (sets the same option as MarginTop: use one)
 	NoCollate         boolOption   // Do not collate when printing multiple copies (default collate)
 	NoPdfCompression  boolOption   // Do not use lossless compression on pdf objects
 	Orientation       stringOption // Set orientation to Landscape or Portrait (default Portrait)
 	PageHeight        uintOption   // Page height
-	PageHeightUnit    stringOption // Page height  with a unit
+	PageHeightUnit    stringOption // Page height with its unit, e.g. "40mm" (sets the same option as PageHeight: use one)
 	PageSize          stringOption // Set paper size to: A4, Letter, etc. (default A4)
 	PageWidth         uintOption   // Page width
-	PageWidthUnit     stringOption // Page width with a unit
+	PageWidthUnit     stringOption // Page width with its unit, e.g. "60mm" (sets the same option as PageWidth: use one)
 	Quiet             boolOption   // Be less verbose
 	ReadArgsFromStdin boolOption   // Read command line arguments from stdin
 	Readme            boolOption   // Output program readme

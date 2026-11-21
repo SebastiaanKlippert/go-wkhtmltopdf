@@ -418,7 +418,20 @@ func TestDuplicateOptions(t *testing.T) {
 	pdfg.MarginRightUnit.Set("1cm")
 
 	err = pdfg.Create()
-	assert.EqualError(t, err, "duplicate argument: --margin-right")
+	assert.EqualError(t, err, `duplicate argument: --margin-right (MarginRight and MarginRightUnit both set it; set one: MarginRightUnit takes the value with its unit, like "10mm")`)
+}
+
+func TestDuplicateUnitOption(t *testing.T) {
+	pdfg, err := NewPDFGenerator()
+	assert.NoError(t, err)
+	pdfg.AddPage(NewPage("https://www.google.com"))
+
+	// PageWidthUnit is not the unit alone: it takes the value with its unit (#127)
+	pdfg.PageWidth.Set(60)
+	pdfg.PageWidthUnit.Set("mm")
+
+	err = pdfg.Create()
+	assert.EqualError(t, err, `duplicate argument: --page-width (PageWidth and PageWidthUnit both set it; set one: PageWidthUnit takes the value with its unit, like "10mm")`)
 }
 
 func TestBufferReset(t *testing.T) {

@@ -295,6 +295,16 @@ func (pdfg *PDFGenerator) findPath() error {
 	return fmt.Errorf("%s not found", exe)
 }
 
+// unitOptions are the options two fields set: one takes a number, the other the value with its unit
+var unitOptions = map[string][2]string{
+	"--margin-bottom": {"MarginBottom", "MarginBottomUnit"},
+	"--margin-left":   {"MarginLeft", "MarginLeftUnit"},
+	"--margin-right":  {"MarginRight", "MarginRightUnit"},
+	"--margin-top":    {"MarginTop", "MarginTopUnit"},
+	"--page-height":   {"PageHeight", "PageHeightUnit"},
+	"--page-width":    {"PageWidth", "PageWidthUnit"},
+}
+
 func (pdfg *PDFGenerator) checkDuplicateFlags() error {
 	// we currently can only have duplicates in the global options, so we only check these
 	var options []string
@@ -302,6 +312,9 @@ func (pdfg *PDFGenerator) checkDuplicateFlags() error {
 		if strings.HasPrefix(arg, "--") { // this is not ideal, the value could also have this prefix
 			for _, option := range options {
 				if option == arg {
+					if f, ok := unitOptions[arg]; ok {
+						return fmt.Errorf("duplicate argument: %s (%s and %s both set it; set one: %s takes the value with its unit, like \"10mm\")", arg, f[0], f[1], f[1])
+					}
 					return fmt.Errorf("duplicate argument: %s", arg)
 				}
 			}
